@@ -1,0 +1,31 @@
+{
+  "name": "openapi-commander",
+  "version": "1.0.0",
+  "description": "Generate a Node.js CLI tool from an OpenAPI definition",
+  "exports": "./index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "bin": {
+    "openapi-commander": "bin/run.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src resources/*.js"
+  },
+  "author": "Barry Coughlan",
+  "license": "MIT",
+  "dependencies": {
+    "@apidevtools/swagger-parser": "^10.0.3",
+    "cli-highlight": "^2.1.11",
+    "commander": "^9.2.0",
+    "lodash": "^4.17.21",
+    "openapi-sampler": "^1.2.3",
+    "swagger2openapi": "^7.0.8"
+  },
+  "devDependencies": {
+    "eslint": "^8.16.0",
+    "eslint-plugin-jest": "^26.2.2",
+    "jest": "^28.1.0"
+  }
+}
