@@ -14,14 +14,24 @@ function getTags(api, endpointsByTag) {
   return tags
 }
 
+function alwaysHighlight(str) {
+  //chalk library disables color if it's piped or not a TTY stream
+  const old = process.env['FORCE_COLOR']
+  process.env['FORCE_COLOR'] = '2'
+  const ret = highlight(str, { language: 'javascript' })
+  process.env['FORCE_COLOR'] = old
+  return ret
+}
+
+
 function getExamples(operation) {
   function renderExample(example, contentType) {
     if (typeof ex === 'string') {
       return example
     } else if (contentType === 'application/json') {
-      return highlight(JSON.stringify(example, null, 2), { language: 'json' })
+      return alwaysHighlight(JSON.stringify(example, null, 2), { language: 'json' })
     } else if (contentType === 'application/yaml') {
-      return highlight(jsYaml.dump(example), { language: 'yaml' })
+      return alwaysHighlight(jsYaml.dump(example), { language: 'yaml' })
     }
     //TODO application/xml
     //TODO application/x-www-form-urlencoded
