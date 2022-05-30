@@ -37,7 +37,7 @@ node petstore.js pet getPetById 1
 - Create a boilerplate repo or 'npx openapi-commander init' that people can clone/fork as a starter project.
 - Replace fetch() with a HTTP client dependency because of experimental warnings.
 - Make compatible with at least node 16.
-- Make global options like --server configurable in file, e.g. node cli.js tool.
+- Make global options like --server configurable in file, e.g. `node cli.js settings server https://example.com`.
 - Auto-detect request body type from file.
 - Show JSON & YAML examples with comments for field descriptions.
   -> Strip comments from JSON when passing in
@@ -50,6 +50,6 @@ node petstore.js pet getPetById 1
 
 # Contributing
 
-This is a hobby side project so I don't implement feature requests, but I will do my best to discuss issues, review PRs
+This is a hobby side project so I probably won't fix and bugs but I will do my best to discuss issues, review PRs
 and keep the project maintained. Please open an issue for discussion before opening any significant PRs to avoid any disappointment
 about project scope.
