@@ -50,6 +50,6 @@ node petstore.js pet getPetById 1
 
 # Contributing
 
-This is a hobby side project so I probably won't fix and bugs but I will do my best to discuss issues, review PRs
+This is a hobby side project so I probably won't fix so my only promise is I will do my best to discuss issues, review PRs
 and keep the project maintained. Please open an issue for discussion before opening any significant PRs to avoid any disappointment
 about project scope.
