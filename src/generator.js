@@ -115,7 +115,15 @@ function Generator(specLocation) {
 
     write(
       `  .action(async function(...args) {\n`,
-      `    const opt = args[args.length - 2]\n`,
+    )
+
+    if (bodyLocation === 'option' || options.length > 0) {
+      write(
+        `    const opt = args[args.length - 2]\n`,
+      )
+    }
+
+    write(
       `    const headers = {${paramByType['header'].join(', ')}}\n`,
       `    const globalOpts = getGlobalOptions()\n`,
       `    if (globalOpts.auth) headers.Authorization = globalOpts.auth\n\n`,

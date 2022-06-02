@@ -90,7 +90,6 @@ updatePet.description('Update an existing pet')
   .addArgument(new Argument('<body>', 'Path to a file containing the request body.'))
   .addOption(new Option('--body-type <bodyType>', 'Content type of the body file').choices([\\"application/json\\",\\"application/xml\\",\\"application/x-www-form-urlencoded\\"]).default('application/json'))
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -110,7 +109,6 @@ addPet.description('Add a new pet to the store')
   .addArgument(new Argument('<body>', 'Path to a file containing the request body.'))
   .addOption(new Option('--body-type <bodyType>', 'Content type of the body file').choices([\\"application/json\\",\\"application/xml\\",\\"application/x-www-form-urlencoded\\"]).default('application/json'))
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -162,7 +160,6 @@ const getPetById = pet.command('getPetById')
 getPetById.description('Find pet by ID')
   .addArgument(new Argument('<petId>', 'ID of pet to return'))
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -238,7 +235,6 @@ const store = program.command('store')
 const getInventory = store.command('getInventory')
 getInventory.description('Returns pet inventories by status')
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -275,7 +271,6 @@ const getOrderById = store.command('getOrderById')
 getOrderById.description('Find purchase order by ID')
   .addArgument(new Argument('<orderId>', 'ID of order that needs to be fetched'))
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -292,7 +287,6 @@ const deleteOrder = store.command('deleteOrder')
 deleteOrder.description('Delete purchase order by ID')
   .addArgument(new Argument('<orderId>', 'ID of the order that needs to be deleted'))
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -369,7 +363,6 @@ loginUser.description('Logs user into the system')
 const logoutUser = user.command('logoutUser')
 logoutUser.description('Logs out current logged in user session')
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -386,7 +379,6 @@ const getUserByName = user.command('getUserByName')
 getUserByName.description('Get user by user name')
   .addArgument(new Argument('<username>', 'The name that needs to be fetched. Use user1 for testing. '))
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -424,7 +416,6 @@ const deleteUser = user.command('deleteUser')
 deleteUser.description('Delete user')
   .addArgument(new Argument('<username>', 'The name that needs to be deleted'))
   .action(async function(...args) {
-    const opt = args[args.length - 2]
     const headers = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
