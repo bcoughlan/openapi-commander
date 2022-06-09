@@ -2,16 +2,36 @@
 
 Generate a CLI tool from an OpenAPI definition using the Node.js [commander](https://www.npmjs.com/package/commander) library.
 
-[![asciicast](https://asciinema.org/a/15qeq95z4k9AG1TaDJ98RhDRW.svg)](https://asciinema.org/a/15qeq95z4k9AG1TaDJ98RhDRW)
+```
+~/personal$ node petstore.js pet
+Usage: petstore pet [options] [command]
+
+Everything about your Pets
+
+Options:
+  -h, --help                           display help for command
+
+Commands:
+  updatePet [options] <body>           Update an existing pet
+  addPet [options] <body>              Add a new pet to the store
+  findPetsByStatus [options]           Finds Pets by status
+  findPetsByTags [options]             *DEPRECATED* Finds Pets by tags
+  getPetById <petId>                   Find pet by ID
+  updatePetWithForm [options] <petId>  Updates a pet in the store with form data
+  deletePet [options] <petId>          Deletes a pet
+  uploadFile [options] <petId>         uploads an image
+  help [command]                       display help for command
+```
 
 # Setup
 
 1. Create an npm project with `npm init` or use an existing one. Your Node.js version must be 18+
 
-2. Install the `commander` dependency.
+2. Install dependencies
 
 ```
 npm install commander@9
+npm install --save-dev openapi-commander
 ```
 
 3. Generate the CLI code
@@ -29,12 +49,16 @@ npx openapi-commander generate https://raw.githubusercontent.com/OAI/OpenAPI-Spe
 4. Run
 
 ```
-node petstore.js pet getPetById 1
+node petstore.js ...
 ```
+
+# Build standalone binaries
+
+To build standalone binaries for each platform I recommend [vercel/pkg](https://github.com/vercel/pkg).
 
 # A very incomplete TODO list...
 
-- Create a boilerplate repo or 'npx openapi-commander init' that people can clone/fork as a starter project.
+- Fix GitHub actions build
 - Replace fetch() with a HTTP client dependency because of experimental warnings.
 - Make compatible with at least node 16.
 - Make global options like --server configurable in file, e.g. `node cli.js settings server https://example.com`.
@@ -50,6 +74,6 @@ node petstore.js pet getPetById 1
 
 # Contributing
 
-This is a hobby side project so I probably won't fix so my only promise is I will do my best to discuss issues, review PRs
+This is a hobby side project so I probably won't fix and bugs but I will do my best to discuss issues, review PRs
 and keep the project maintained. Please open an issue for discussion before opening any significant PRs to avoid any disappointment
 about project scope.
