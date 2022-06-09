@@ -3,6 +3,7 @@ const fs = require('fs/promises')
 const path = require('path')
 const { sanitizeCommand, sanitizeComment, sanitizeString, sanitizeVariable } = require('./sanitize')
 const { groupEndpointsByFirstTag, getExamples, getTags } = require('./spec-utils')
+const _ = require('lodash')
 
 const globalFlags = new Set(['d', 'debug', 's', 'server'])
 
@@ -57,6 +58,10 @@ function Generator(specLocation) {
 
       for (const { parameters, path, method, operation } of endpointsByTag[tag.name]) {
         try {
+          if (!operation.operationId) {
+            operation.operationId = _.camelCase(`${method.toLowerCase()}_${path.replace(/\//g, '_')}`)
+          }
+
           const examples = getExamples(operation)
           const commandName = rootUniqueVars(operation.operationId)
 
