@@ -6,6 +6,13 @@ const { groupEndpointsByFirstTag, getExamples, getTags } = require('./spec-utils
 
 const globalFlags = new Set(['d', 'debug', 's', 'server'])
 
+const reservedKeywords = [
+  "break",  "case",  "catch",  "class",  "const",  "continue",  "debugger",  "default",  "delete",  "do",  "else", 
+  "export",  "extends",  "finally",  "for",  "function",  "if",  "import",  "in",  "instanceof",  "new",  "return",
+  "super",  "switch",  "this",  "throw",  "try",  "typeof",  "var",  "void",  "while",  "with",  "yield",
+  "enum",  "implements",  "interface",  "let",  "package",  "private",  "protected",  "public",  "static",  "await"
+]
+
 //Generate Javascript variable names from any string that don't clash with other variable names
 function UniqueVarGenerator(initial) {
   const used = new Set(initial) ?? new Set()
@@ -13,7 +20,7 @@ function UniqueVarGenerator(initial) {
   return (name) => {
     name = sanitizeVariable(name)
 
-    if (!used.has(name)) {
+    if (!used.has(name) && !reservedKeywords.includes(name)) {
       used.add(name)
       return name
     }
