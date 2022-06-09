@@ -6,6 +6,14 @@
   "engines": {
     "node": ">=16.0.0"
   },
+  "keywords": [
+    "openapi",
+    "openapi3",
+    "commander",
+    "cli",
+    "api",
+    "generator"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bcoughlan/openapi-commander"
