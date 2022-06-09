@@ -59,8 +59,6 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
 # A very incomplete TODO list...
 
 - Fix GitHub actions build
-- Replace fetch() with a HTTP client dependency because of experimental warnings.
-- Make compatible with at least node 16.
 - Make global options like --server configurable in file, e.g. `node cli.js settings server https://example.com`.
 - Auto-detect request body type from file.
 - Show JSON & YAML examples with comments for field descriptions.
@@ -71,6 +69,7 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
 - application/x-www-form-urlencoded content types.
 - Server templating.
 - Autocomplete.
+- end-to-end tests (e.g. by implementing a fake petstore server)x
 
 # Contributing
 

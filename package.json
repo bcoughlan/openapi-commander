@@ -4,7 +4,7 @@
   "description": "Generate a commander.js CLI tool from an OpenAPI definition.",
   "exports": "./index.js",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.0.0"
   },
   "repository": {
     "type": "git",

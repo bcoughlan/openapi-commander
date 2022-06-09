@@ -8,6 +8,23 @@ const fs = require('fs/promises')
 const { Command, Argument, Option } = require('commander')
 const program = new Command()
 
+function httpRequest(url, {method, body, headers}) {
+  return new Promise((resolve, reject) => {
+    const client = url.startsWith('https') ? require('https') : require('http')
+    const request = client.request(url, {headers, method}, (response) => {
+      const body = []
+      response.on('data', (chunk) => body.push(chunk))
+      response.on('end', () => {
+        resolve({body: body.join(''), status: response.statusCode, headers: response.headers})
+      })
+    })
+    request.on('aborted', (err) => reject(err))
+    request.on('error', (err) => reject(err))
+    if (body) request.write(body)
+    request.end()
+  })
+}
+
 async function request(method, baseUrl, path, { pathParams, queryParams, headers, body, contentType }, requestImpl) {
   try {
     var fullUrl = new URL(baseUrl)
@@ -40,21 +57,18 @@ async function request(method, baseUrl, path, { pathParams, queryParams, headers
     }
   } else {
     // eslint-disable-next-line no-undef
-    const response = await fetch(fullUrl.toString(), {method, body, headers})
-
-    console.log("Status:", response.status)
-    console.log(response.headers.get('Content-Type'))
-
-    const text = await response.text()
-    if (response.headers.get('Content-Type')?.startsWith('application/json')) {
+    const response = await httpRequest(fullUrl.toString(), {method, body, headers})
+    console.error("Status:", response.status) //stderr so body can be piped
+    
+    if (response.headers['content-type']?.startsWith('application/json')) {
       try {
-        console.log(JSON.stringify(JSON.parse(text), null, 2))
+        console.log(JSON.stringify(JSON.parse(response.body), null, 2))
       } catch (e) {
         //For misbehaving APIs
-        console.log(text)
+        console.log(response.body)
       }
     } else {
-      console.log(text)
+      console.log(response.body)
     }
   }
 }

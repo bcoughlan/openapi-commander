@@ -117,7 +117,7 @@ function Generator(specLocation) {
       `  .action(async function(...args) {\n`,
     )
 
-    if (bodyLocation === 'option' || options.length > 0) {
+    if (bodyLocation || options.length > 0) {
       write(
         `    const opt = args[args.length - 2]\n`,
       )
