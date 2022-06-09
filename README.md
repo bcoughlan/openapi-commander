@@ -3,7 +3,7 @@
 Generate a CLI tool from an OpenAPI definition using the Node.js [commander](https://www.npmjs.com/package/commander) library.
 
 ```
-~/personal$ node petstore.js pet
+~/petstore$ node petstore.js pet
 Usage: petstore pet [options] [command]
 
 Everything about your Pets
