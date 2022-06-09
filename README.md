@@ -69,7 +69,6 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
 - application/x-www-form-urlencoded content types.
 - Server templating.
 - Autocomplete.
-- end-to-end tests (e.g. by implementing a fake petstore server)x
 
 # Contributing
 
