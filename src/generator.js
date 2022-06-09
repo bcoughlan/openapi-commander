@@ -118,11 +118,11 @@ function Generator(specLocation) {
   function generateAction(args, options, method, path, bodyLocation, defaultContentType) {
     const paramByType = { 'query': [], 'path': [], 'header': [], 'cookie': [] }
     for (const [i, arg] of args.entries()) {
-      paramByType[arg.in].push(`'${sanitizeString(arg.name)}': args[${i}]`)
+      paramByType[arg.in].push({key: sanitizeString(arg.name), ref: `args[${i}]`})
     }
     for (const opt of options) {
       const sanitizedOpt = sanitizeString(opt.name)
-      paramByType[opt.in].push(`'${sanitizedOpt}': opt['${sanitizedOpt}']`)
+      paramByType[opt.in].push({key: sanitizedOpt, ref: `opt['${sanitizedOpt}']`})
     }
 
     write(
@@ -135,16 +135,30 @@ function Generator(specLocation) {
       )
     }
 
+    write(`    const headers = {}\n`,)
+    for (const {key, ref} of paramByType['header']) {
+      write(`    if (${ref} !== undefined && ${ref} !== null) headers['${key}'] = ${ref}\n`)
+    }
+
+
+    write(`    const pathParams = {}\n`)
+    for (const {key, ref} of paramByType['path']) {
+      write(`    pathParams['${key}'] = ${ref}\n`)
+    }
+
+    write(`    const queryParams = {}\n`)
+    for (const {key, ref} of paramByType['path']) {
+      write(`    if (${ref} !== undefined && ${ref} !== null) queryParams['${key}'] = ${ref}\n`)
+    }
+
     write(
-      `    const headers = {${paramByType['header'].join(', ')}}\n`,
       `    const globalOpts = getGlobalOptions()\n`,
       `    if (globalOpts.auth) headers.Authorization = globalOpts.auth\n\n`,
       `    const requestType = globalOpts.debug ? 'debug' : 'request'\n`,
       `    request('${sanitizeString(method)}', globalOpts.server ?? defaultServer, '${sanitizeString(path)}', {\n`,
-      `      pathParams: {${paramByType['path'].join(', ')}},\n`,
-      `      queryParams: {${paramByType['query'].join(', ')}},\n`,
-      `      headers,\n`,
+      `      pathParams, queryParams, headers,\n`,
     )
+
     if (bodyLocation) {
       write(
         `      body: await fs.readFile(${bodyLocation === 'argument'? 'args[args.length - 3]' : "opt['body']"}, 'utf-8'),\n`,
