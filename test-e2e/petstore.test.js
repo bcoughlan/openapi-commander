@@ -22,7 +22,7 @@ describe('Petstore', () => {
     })
     server = app.listen(3123)
 
-    await exec('node bin/run.js generate test-resources/petstore.yaml /tmp/petstore.js')
+    await exec('mkdir -p tmp && node bin/run.js generate test-resources/petstore.yaml tmp/petstore.js')
   })
 
   afterAll(async () => {
@@ -61,7 +61,7 @@ describe('Petstore', () => {
 
   async function run(cmd) {
     try {
-      let { stdout, stderr } = await exec(`node petstore.js -s ${baseUrl} ${cmd} 2>&1`)
+      let { stdout, stderr } = await exec(`node tmp/petstore.js -s ${baseUrl} ${cmd} 2>&1`)
       //remove node experimental warnings as they are not deterministic
       stdout = stdout.replace(/\(node:\d+\) /, '')
       return { stdout, stderr }

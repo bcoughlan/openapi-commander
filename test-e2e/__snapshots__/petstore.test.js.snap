@@ -3,10 +3,7 @@
 exports[`Petstore can do a GET 1`] = `
 Object {
   "stderr": "",
-  "stdout": "ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
-(Use \`node --trace-warnings ...\` to show where the warning was created)
-Status: 200
-application/json; charset=utf-8
+  "stdout": "Status: 200
 {
   \\"id\\": 1,
   \\"name\\": \\"doggie\\"
@@ -18,10 +15,7 @@ application/json; charset=utf-8
 exports[`Petstore can do a PUT 1`] = `
 Object {
   "stderr": "",
-  "stdout": "ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
-(Use \`node --trace-warnings ...\` to show where the warning was created)
-Status: 200
-application/json; charset=utf-8
+  "stdout": "Status: 200
 {
   \\"id\\": 10,
   \\"name\\": \\"test\\",
@@ -115,22 +109,22 @@ Object {
   "stderr": "",
   "stdout": "Example for application/json:
 {
-  [36m\\"id\\"[39m: [32m10[39m,
-  [36m\\"name\\"[39m: [31m\\"doggie\\"[39m,
-  [36m\\"category\\"[39m: {
-    [36m\\"id\\"[39m: [32m1[39m,
-    [36m\\"name\\"[39m: [31m\\"Dogs\\"[39m
+  [31m\\"id\\"[39m: [32m10[39m,
+  [31m\\"name\\"[39m: [31m\\"doggie\\"[39m,
+  [31m\\"category\\"[39m: {
+    [31m\\"id\\"[39m: [32m1[39m,
+    [31m\\"name\\"[39m: [31m\\"Dogs\\"[39m
   },
-  [36m\\"photoUrls\\"[39m: [
+  [31m\\"photoUrls\\"[39m: [
     [31m\\"string\\"[39m
   ],
-  [36m\\"tags\\"[39m: [
+  [31m\\"tags\\"[39m: [
     {
-      [36m\\"id\\"[39m: [32m0[39m,
-      [36m\\"name\\"[39m: [31m\\"string\\"[39m
+      [31m\\"id\\"[39m: [32m0[39m,
+      [31m\\"name\\"[39m: [31m\\"string\\"[39m
     }
   ],
-  [36m\\"status\\"[39m: [31m\\"available\\"[39m
+  [31m\\"status\\"[39m: [31m\\"available\\"[39m
 }
 Example for application/xml:
 {
