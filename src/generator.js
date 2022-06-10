@@ -3,6 +3,7 @@ const fs = require('fs/promises')
 const path = require('path')
 const { sanitizeCommand, sanitizeComment, sanitizeString, sanitizeVariable } = require('./sanitize')
 const { groupEndpointsByFirstTag, getExamples, getTags } = require('./spec-utils')
+const { trimDescription } = require('./utils')
 const _ = require('lodash')
 
 const globalFlags = new Set(['d', 'debug', 's', 'server'])
@@ -52,9 +53,7 @@ function Generator(specLocation) {
 
       write(`/* ============== ${sanitizeComment(tag.name)} ============== */\n`)
       const cmdVar = rootUniqueVars(tag.name)
-      write(`const ${cmdVar} = program.command('${cmdVar}')\n`)
-      if (tag.description)
-        write(`${cmdVar}.description('${sanitizeString(tag.description)}')\n\n`)
+      generateTagCommand(cmdVar, tag.description)
 
       for (const { parameters, path, method, operation } of endpointsByTag[tag.name]) {
         try {
@@ -94,12 +93,32 @@ function Generator(specLocation) {
     return output.join('')
   }
 
+  function generateTagCommand(cmdVar, tagDescription) {
+    write(`const ${cmdVar} = program.command('${cmdVar}')\n`)
+    if (tagDescription) {
+      const summary = sanitizeString(trimDescription(tagDescription))
+      const description = sanitizeString(tagDescription)
+      if (summary !== description) {
+        write(`  .summary('${summary}')\n`)
+      }
+      write(`  .description('${description}')\n\n`)
+    }
+  }
+
   function generateCommand(commandName, cmdVar, operation, examples) {
     write(`const ${commandName} = ${cmdVar}.command('${sanitizeCommand(operation.operationId)}')\n`)
     if (Object.keys(examples).length) {
       write(`${commandName}.command('examples').action(() => { printExamples(${JSON.stringify(examples)}) })\n`)
     }
-    write(`${commandName}.description('${operation.deprecated ? '*DEPRECATED* ' : ''}${sanitizeString(operation.summary ?? operation.description)}')\n`)
+
+    const deprecated = operation.deprecated ? '*DEPRECATED* ' : ''
+    const summary = sanitizeString(trimDescription(deprecated + (operation.summary || operation.description)))
+    const description = sanitizeString(deprecated + (operation.description || operation.summary))
+    write(`${commandName}\n`)
+    if (summary !== description) {
+      write(`  .summary('${summary}')\n`)
+    }
+    write(`  .description('${description}')\n`)
   }
 
   function generateBody(requestBody) {
