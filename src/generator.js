@@ -147,7 +147,7 @@ function Generator(specLocation) {
     }
 
     write(`    const queryParams = {}\n`)
-    for (const {key, ref} of paramByType['path']) {
+    for (const {key, ref} of paramByType['query']) {
       write(`    if (${ref} !== undefined && ${ref} !== null) queryParams['${key}'] = ${ref}\n`)
     }
 

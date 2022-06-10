@@ -106,14 +106,14 @@ updatePet.description('Update an existing pet')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('put', globalOpts.server ?? defaultServer, '/pet', {
-      pathParams: {},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
       body: await fs.readFile(args[args.length - 3], 'utf-8'),
       contentType: opt.bodyType || 'application/json'    }, requestType)
   })
@@ -126,14 +126,14 @@ addPet.description('Add a new pet to the store')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('post', globalOpts.server ?? defaultServer, '/pet', {
-      pathParams: {},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
       body: await fs.readFile(args[args.length - 3], 'utf-8'),
       contentType: opt.bodyType || 'application/json'    }, requestType)
   })
@@ -144,14 +144,15 @@ findPetsByStatus.description('Finds Pets by status')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
+    if (opt['status'] !== undefined && opt['status'] !== null) queryParams['status'] = opt['status']
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/pet/findByStatus', {
-      pathParams: {},
-      queryParams: {'status': opt['status']},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -161,14 +162,15 @@ findPetsByTags.description('*DEPRECATED* Finds Pets by tags')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
+    if (opt['tags'] !== undefined && opt['tags'] !== null) queryParams['tags'] = opt['tags']
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/pet/findByTags', {
-      pathParams: {},
-      queryParams: {'tags': opt['tags']},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -177,14 +179,15 @@ getPetById.description('Find pet by ID')
   .addArgument(new Argument('<petId>', 'ID of pet to return'))
   .action(async function(...args) {
     const headers = {}
+    const pathParams = {}
+    pathParams['petId'] = args[0]
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/pet/{petId}', {
-      pathParams: {'petId': args[0]},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -196,14 +199,17 @@ updatePetWithForm.description('Updates a pet in the store with form data')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    pathParams['petId'] = args[0]
+    const queryParams = {}
+    if (opt['name'] !== undefined && opt['name'] !== null) queryParams['name'] = opt['name']
+    if (opt['status'] !== undefined && opt['status'] !== null) queryParams['status'] = opt['status']
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('post', globalOpts.server ?? defaultServer, '/pet/{petId}', {
-      pathParams: {'petId': args[0]},
-      queryParams: {'name': opt['name'], 'status': opt['status']},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -213,15 +219,17 @@ deletePet.description('Deletes a pet')
   .addOption(new Option('-a --apiKey <apiKey>', ''))
   .action(async function(...args) {
     const opt = args[args.length - 2]
-    const headers = {'api_key': opt['api_key']}
+    const headers = {}
+    if (opt['api_key'] !== undefined && opt['api_key'] !== null) headers['api_key'] = opt['api_key']
+    const pathParams = {}
+    pathParams['petId'] = args[0]
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('delete', globalOpts.server ?? defaultServer, '/pet/{petId}', {
-      pathParams: {'petId': args[0]},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -234,14 +242,16 @@ uploadFile.description('uploads an image')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    pathParams['petId'] = args[0]
+    const queryParams = {}
+    if (opt['additionalMetadata'] !== undefined && opt['additionalMetadata'] !== null) queryParams['additionalMetadata'] = opt['additionalMetadata']
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('post', globalOpts.server ?? defaultServer, '/pet/{petId}/uploadImage', {
-      pathParams: {'petId': args[0]},
-      queryParams: {'additionalMetadata': opt['additionalMetadata']},
-      headers,
+      pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/octet-stream'    }, requestType)
   })
@@ -252,14 +262,14 @@ const getInventory = store.command('getInventory')
 getInventory.description('Returns pet inventories by status')
   .action(async function(...args) {
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/store/inventory', {
-      pathParams: {},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -271,14 +281,14 @@ placeOrder.description('Place an order for a pet')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('post', globalOpts.server ?? defaultServer, '/store/order', {
-      pathParams: {},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'    }, requestType)
   })
@@ -288,14 +298,15 @@ getOrderById.description('Find purchase order by ID')
   .addArgument(new Argument('<orderId>', 'ID of order that needs to be fetched'))
   .action(async function(...args) {
     const headers = {}
+    const pathParams = {}
+    pathParams['orderId'] = args[0]
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/store/order/{orderId}', {
-      pathParams: {'orderId': args[0]},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -304,14 +315,15 @@ deleteOrder.description('Delete purchase order by ID')
   .addArgument(new Argument('<orderId>', 'ID of the order that needs to be deleted'))
   .action(async function(...args) {
     const headers = {}
+    const pathParams = {}
+    pathParams['orderId'] = args[0]
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('delete', globalOpts.server ?? defaultServer, '/store/order/{orderId}', {
-      pathParams: {'orderId': args[0]},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -327,14 +339,14 @@ createUser.description('Create user')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('post', globalOpts.server ?? defaultServer, '/user', {
-      pathParams: {},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'    }, requestType)
   })
@@ -346,14 +358,14 @@ createUsersWithListInput.description('Creates list of users with given input arr
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('post', globalOpts.server ?? defaultServer, '/user/createWithList', {
-      pathParams: {},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'    }, requestType)
   })
@@ -365,14 +377,16 @@ loginUser.description('Logs user into the system')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
+    if (opt['username'] !== undefined && opt['username'] !== null) queryParams['username'] = opt['username']
+    if (opt['password'] !== undefined && opt['password'] !== null) queryParams['password'] = opt['password']
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/user/login', {
-      pathParams: {},
-      queryParams: {'username': opt['username'], 'password': opt['password']},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -380,14 +394,14 @@ const logoutUser = user.command('logoutUser')
 logoutUser.description('Logs out current logged in user session')
   .action(async function(...args) {
     const headers = {}
+    const pathParams = {}
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/user/logout', {
-      pathParams: {},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -396,14 +410,15 @@ getUserByName.description('Get user by user name')
   .addArgument(new Argument('<username>', 'The name that needs to be fetched. Use user1 for testing. '))
   .action(async function(...args) {
     const headers = {}
+    const pathParams = {}
+    pathParams['username'] = args[0]
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('get', globalOpts.server ?? defaultServer, '/user/{username}', {
-      pathParams: {'username': args[0]},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
@@ -416,14 +431,15 @@ updateUser.description('Update user')
   .action(async function(...args) {
     const opt = args[args.length - 2]
     const headers = {}
+    const pathParams = {}
+    pathParams['username'] = args[0]
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('put', globalOpts.server ?? defaultServer, '/user/{username}', {
-      pathParams: {'username': args[0]},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'    }, requestType)
   })
@@ -433,14 +449,15 @@ deleteUser.description('Delete user')
   .addArgument(new Argument('<username>', 'The name that needs to be deleted'))
   .action(async function(...args) {
     const headers = {}
+    const pathParams = {}
+    pathParams['username'] = args[0]
+    const queryParams = {}
     const globalOpts = getGlobalOptions()
     if (globalOpts.auth) headers.Authorization = globalOpts.auth
 
     const requestType = globalOpts.debug ? 'debug' : 'request'
     request('delete', globalOpts.server ?? defaultServer, '/user/{username}', {
-      pathParams: {'username': args[0]},
-      queryParams: {},
-      headers,
+      pathParams, queryParams, headers,
     }, requestType)
   })
 
