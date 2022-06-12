@@ -1,6 +1,28 @@
 # openapi-commander
 
-Generate a CLI tool from an OpenAPI definition using the Node.js [commander](https://www.npmjs.com/package/commander) library.
+Generate a Node.js command line tool from an OpenAPI definition using the [commander](https://www.npmjs.com/package/commander) library.
+
+# Example usage
+
+## Usage: Subcommands grouped by tags
+
+```
+~/petstore$ node petstore.js
+
+Usage: petstore [options] [command]
+
+Options:
+  -d, --debug            Print the HTTP request instead of sending it
+  -s, --server <server>  Server to use
+  -a, --auth <auth>      Authorization header to send
+  -h, --help             display help for command
+
+Commands:
+  pet                    Everything about your Pets
+  store
+  user                   Operations about user
+  help [command]         display help for command
+```
 
 ```
 ~/petstore$ node petstore.js pet
@@ -21,6 +43,80 @@ Commands:
   deletePet [options] <petId>          Deletes a pet
   uploadFile [options] <petId>         uploads an image
   help [command]                       display help for command
+```
+
+
+## Basic GET example
+
+```
+~/petstore$ node petstore.js pet getPetById 1
+Status: 200
+{
+  "id": 1,
+  "category": {
+    "id": 1,
+    "name": "Hola"
+  },
+  "name": "Perrito",
+  "photoUrls": [
+    "/tmp/inflector995596007222725944.tmp"
+  ],
+  "tags": [
+    {
+      "id": 1,
+      "name": "Bizcocho"
+    }
+  ],
+  "status": "available"
+}
+```
+
+## Global options
+
+### Custom server
+
+```
+~/petstore$ node petstore.js -s https://mypetstore.example pet getPetById 1
+```
+
+### Set Authorization header
+
+```
+~/petstore$ node petstore.js -a 'Bearer mytoken' getPetById 1
+```
+
+### Debug - show request without sending
+
+```
+~/petstore$ node petstore.js pet -a 'Bearer mytoken' -s https://mypetstore.example getPetById 1 --debug
+GET https://mypetstore.example/pet/1
+Authorization: Bearer mytoken
+Accept: application/json
+```
+
+## Print example request bodies
+
+```
+~/petstore$ node petstore.js pet updatePet examples
+Example for application/json:
+{
+  "id": 10,
+  "name": "doggie",
+  "category": {
+    "id": 1,
+    "name": "Dogs"
+  },
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 0,
+      "name": "string"
+    }
+  ],
+  "status": "available"
+}
 ```
 
 # Setup
