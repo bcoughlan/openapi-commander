@@ -86,7 +86,7 @@ Object {
   "stderr": "",
   "stdout": "Usage: petstore pet updatePet [options] [command] <body>
 
-Update an existing pet
+Update an existing pet by Id
 
 Arguments:
   body                    Path to a file containing the request body.
