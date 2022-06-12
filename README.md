@@ -1,4 +1,4 @@
-# openapi-commander
+# OpenAPI Commander
 
 Generate a Node.js command line tool from an OpenAPI definition using the [commander](https://www.npmjs.com/package/commander) library.
 
