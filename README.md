@@ -121,7 +121,7 @@ Example for application/json:
 
 # Setup
 
-1. Create an npm project with `npm init` or use an existing one. Your Node.js version must be 18+
+1. Create an npm project with `npm init` or use an existing one. Your Node.js version must be 16+
 
 2. Install dependencies
 
