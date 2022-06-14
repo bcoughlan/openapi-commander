@@ -79,11 +79,15 @@ Status: 200
 ~/petstore$ node petstore.js -s https://mypetstore.example pet getPetById 1
 ```
 
+Alternatively you can override it by setting the environment variable `{COMMANDNAME}_SERVER`, e.g. `PETSTORE_SERVER`.
+
 ### Set Authorization header
 
 ```
 ~/petstore$ node petstore.js -a 'Bearer mytoken' getPetById 1
 ```
+
+Alternatively you can override it by setting the environment variable `{COMMANDNAME}_AUTH`, e.g. `PETSTORE_AUTH`.
 
 ### Debug - show request without sending
 
@@ -155,7 +159,7 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
 # A very incomplete TODO list...
 
 - Fix GitHub actions build
-- Make global options like --server configurable in file, e.g. `node cli.js settings server https://example.com`.
+- Implement different security/auth types.
 - Auto-detect request body type from file.
 - Show JSON & YAML examples with comments for field descriptions.
   -> Strip comments from JSON when passing in

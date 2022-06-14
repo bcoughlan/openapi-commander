@@ -42,7 +42,7 @@ Object {
 
 Options:
   -d, --debug            Print the HTTP request instead of sending it
-  -s, --server <server>  Server to use
+  -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
   -h, --help             display help for command
 

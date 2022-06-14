@@ -17,6 +17,12 @@ describe('Petstore', () => {
     app.get('/pet/1', (req, res) => {
       res.json({ id: 1, name: 'doggie' })
     })
+    app.get('/pet/2', (req, res) => {
+      res.json({ auth: req.headers['authorization'] })
+    })
+    app.get('/customserver/pet/1', (req, res) => {
+      res.json({ msg: 'custom server worked' })
+    })
     app.put('/pet', (req, res) => {
       res.json(req.body)
     })
@@ -59,11 +65,45 @@ describe('Petstore', () => {
     expect(await run('pet updatePet /tmp/pet.json')).toMatchSnapshot()
   })
 
-  async function run(cmd) {
+  describe('auth header', () => {
+    it('can set with option', async () => {
+      const { stdout } = await run('pet getPetById 2 -a "test auth"')
+      expect(stdout).toContain('"test auth"')
+    })
+
+    it('can set with env var', async () => {
+      const { stdout } = await run('pet getPetById 2', { env: { 'PETSTORE_AUTH': 'test env auth' } })
+      expect(stdout).toContain('"test env auth"')
+    })
+
+    it('gives precedence to option over env var', async () => {
+      const { stdout } = await run('pet getPetById 2 -a "test auth"', { env: { 'PETSTORE_AUTH': 'test env auth' } })
+      expect(stdout).toContain('"test auth"')
+    })
+  })
+
+  describe('server', () => {
+    it('can set with option', async () => {
+      const { stdout } = await run('pet getPetById 1', { server: `${baseUrl}/customserver` })
+      expect(stdout).toContain('"custom server worked"')
+    })
+
+    it('can set with env var', async () => {
+      const { stdout } = await run('pet getPetById 1', { server: null, env: { 'PETSTORE_SERVER': `${baseUrl}/customserver` } })
+      expect(stdout).toContain('"custom server worked"')
+    })
+
+    it('can set with env var', async () => {
+      const { stdout } = await run('pet getPetById 1', { server: `${baseUrl}/customserver`, env: { 'PETSTORE_SERVER': `${baseUrl}/badpath` } })
+      expect(stdout).toContain('"custom server worked"')
+    })
+  })
+
+  //TODO server
+
+  async function run(cmd, { env = {}, server = baseUrl } = {}) {
     try {
-      let { stdout, stderr } = await exec(`node tmp/petstore.js -s ${baseUrl} ${cmd} 2>&1`)
-      //remove node experimental warnings as they are not deterministic
-      stdout = stdout.replace(/\(node:\d+\) /, '')
+      let { stdout, stderr } = await exec(`node tmp/petstore.js ${!server ? '' : `-s ${server}`} ${cmd} 2>&1`, { env: { ...process.env, ...env } })
       return { stdout, stderr }
     } catch (e) {
       return { stdout: e.stdout, stderr: e.stderr, code: e.code }

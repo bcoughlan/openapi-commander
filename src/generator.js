@@ -36,7 +36,7 @@ function UniqueVarGenerator(initial) {
   }
 }
 
-function Generator(specLocation) {
+function Generator(specLocation, cmdName) {
 
   const output = []
   function write(...args) { output.push(...args) }
@@ -44,7 +44,9 @@ function Generator(specLocation) {
   async function generate() {
     const api = await SwaggerParser.dereference(specLocation)
 
-    write(await fs.readFile(path.join(__dirname, '../resources/header.js'), 'utf8'))
+    write((await fs.readFile(path.join(__dirname, '../resources/header.js'), 'utf8'))
+      .replace('COMMAND_NAME_TO_BE_REPLACED', sanitizeString(cmdName))
+      .replace('COMMAND_NAME_ENV_VARS_TO_BE_REPLACED', sanitizeString(_.snakeCase(cmdName).toUpperCase())))
     write(`const defaultServer = '${sanitizeString(api.servers?.[0]?.url)}'\n\n`)
 
     const rootUniqueVars = new UniqueVarGenerator()
