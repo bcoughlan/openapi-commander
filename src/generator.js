@@ -1,3 +1,5 @@
+require('supports-color').supportsColor = () => 1
+
 const SwaggerParser = require('@apidevtools/swagger-parser')
 const fs = require('fs/promises')
 const path = require('path')
