@@ -1,0 +1,49 @@
+openapi: 3.1.0
+info:
+  title: Query Params test
+  version: "1.0"
+tags:
+- name: test
+  description: Everything about your Pets
+servers:
+- url: https://queryparams.invalid
+paths:
+  /testArrayDefaults:
+    get:
+      tags:
+      - test
+      summary: 
+      operationId: testArrayDefaults
+      requestBody:
+      parameters:
+      - name: types
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+  /testExplodeFalse:
+    get:
+      tags:
+      - test
+      summary: 
+      operationId: testExplodeFalse
+      requestBody:
+      parameters:
+      - name: types
+        in: query
+        required: true
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}

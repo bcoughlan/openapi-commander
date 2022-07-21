@@ -66,8 +66,9 @@ function Generator(specLocation, cmdName) {
           const examples = getExamples(operation)
           const commandName = rootUniqueVars(operation.operationId)
 
-          const options = parameters.filter(p => !p.required || Object.prototype.hasOwnProperty.call(p, 'default'))
-          const args = parameters.filter(p => p.required && !Object.prototype.hasOwnProperty.call(p, 'default'))
+          const isArgument = p => p.schema?.type !== 'array' && p.required && !Object.prototype.hasOwnProperty.call(p, 'default')
+          const options = parameters.filter(p => !isArgument(p))
+          const args = parameters.filter(p => isArgument(p))
 
           const bodyLocation = !operation.requestBody ? null : (operation.requestBody.required) ? 'argument' : 'option'
           const defaultContentType = Object.keys(operation.requestBody?.content ?? {})?.[0]
@@ -139,11 +140,11 @@ function Generator(specLocation, cmdName) {
   function generateAction(args, options, method, path, bodyLocation, defaultContentType) {
     const paramByType = { 'query': [], 'path': [], 'header': [], 'cookie': [] }
     for (const [i, arg] of args.entries()) {
-      paramByType[arg.in].push({key: sanitizeString(arg.name), ref: `args[${i}]`})
+      paramByType[arg.in].push({key: sanitizeString(arg.name), ref: `args[${i}]`, definition: arg})
     }
     for (const opt of options) {
       const sanitizedOpt = sanitizeString(opt.name)
-      paramByType[opt.in].push({key: sanitizedOpt, ref: `opt['${sanitizedOpt}']`})
+      paramByType[opt.in].push({key: sanitizedOpt, ref: `opt['${sanitizedOpt}']`, definition: opt})
     }
 
     write(
@@ -167,9 +168,13 @@ function Generator(specLocation, cmdName) {
       write(`    pathParams['${key}'] = ${ref}\n`)
     }
 
-    write(`    const queryParams = {}\n`)
-    for (const {key, ref} of paramByType['query']) {
-      write(`    if (${ref} !== undefined && ${ref} !== null) queryParams['${key}'] = ${ref}\n`)
+    write(`    const queryParams = []\n`)
+    for (const {key, ref, definition} of paramByType['query']) {
+      if (definition.schema?.type === 'array' && definition.explode !== false) {
+        write(`    if (${ref}) ${ref}.forEach(p => queryParams.push(['${key}', p]))\n`)
+      } else {
+        write(`    queryParams.push(['${key}', ${ref}])\n`)
+      }
     }
 
     write(
@@ -183,7 +188,7 @@ function Generator(specLocation, cmdName) {
     if (bodyLocation) {
       write(
         `      body: await fs.readFile(${bodyLocation === 'argument'? 'args[args.length - 3]' : "opt['body']"}, 'utf-8'),\n`,
-        `      contentType: opt.bodyType || '${sanitizeString(defaultContentType)}'`,
+        `      contentType: opt.bodyType || '${sanitizeString(defaultContentType)}'\n`,
       )
     }
     write(
@@ -212,9 +217,19 @@ function Generator(specLocation, cmdName) {
       const name = uniqueOptions(option.name)
       const shortName = uniqueOptions(option.name[0])
       const description = sanitizeString(option.description)
-      write(`  .addOption(new Option('-${shortName} --${name} <${name}>', '${description}')`)
-      if (option.schema?.enum) {
-        write(`.choices([${option.schema.enum.map(e => `'${sanitizeString(e)}'`).join(', ')}])`)
+
+      if (option.schema?.type === 'array') {
+        const choices = option.schema?.items?.enum ? 'choices: ' + option.schema.items.enum.map(e => sanitizeString(e)).join(',') : ''
+        write(`  .addOption(new Option('-${shortName} --${name} <${name}>', 'Comma-separated list. ${description} ${choices}').argParser(v => v.split(','))`)
+        //TODO 'choices' doesn't work together with 'argParser'
+        // if (option.schema?.items?.enum) {
+          //write(`.choices([${option.schema.items.enum.map(e => `'${sanitizeString(e)}'`).join(', ')}])`)
+        // }
+      } else {
+        write(`  .addOption(new Option('-${shortName} --${name} <${name}>', '${description}')`)
+        if (option.schema?.enum) {
+          write(`.choices([${option.schema.enum.map(e => `'${sanitizeString(e)}'`).join(', ')}])`)
+        }
       }
       write(')\n')
     }

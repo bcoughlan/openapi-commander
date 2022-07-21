@@ -165,7 +165,7 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
   -> Strip comments from JSON when passing in
 - Ability to print out a curl command instead of fetching e.g. --debug=curl https://github.com/xxorax/node-shell-escape/blob/master/README.md
 - Strip html/markdown from description
-- Path parameters containing arrays and objects https://swagger.io/docs/specification/serialization/
+- More serialization options https://swagger.io/docs/specification/serialization/
 - application/x-www-form-urlencoded content types.
 - Server templating.
 - Autocomplete.

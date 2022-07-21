@@ -37,7 +37,7 @@ async function request(method, baseUrl, path, { pathParams, queryParams, headers
     throw err
   }
 
-  const definedParams = Object.entries(queryParams).filter(e => e[1] !== undefined)
+  const definedParams = queryParams.filter(e => e[1] !== undefined && e[1] !== null)
   fullUrl.search = new URLSearchParams(definedParams).toString()
   if (!fullUrl.pathname.endsWith('/')) fullUrl.pathname += '/'
   fullUrl.pathname += path.split('/').map(part => {
