@@ -140,11 +140,19 @@ function Generator(specLocation, cmdName) {
   function generateAction(args, options, method, path, bodyLocation, defaultContentType) {
     const paramByType = { 'query': [], 'path': [], 'header': [], 'cookie': [] }
     for (const [i, arg] of args.entries()) {
-      paramByType[arg.in].push({key: sanitizeString(arg.name), ref: `args[${i}]`, definition: arg})
+      if (!paramByType[arg.in]) {
+        console.log('WARNING: Ignoring unknown parameter type:', arg.in)
+      } else {
+        paramByType[arg.in].push({key: sanitizeString(arg.name), ref: `args[${i}]`, definition: arg})
+      }
     }
     for (const opt of options) {
       const sanitizedOpt = sanitizeString(opt.name)
-      paramByType[opt.in].push({key: sanitizedOpt, ref: `opt['${sanitizedOpt}']`, definition: opt})
+      if (!paramByType[opt.in]) {
+        console.log('WARNING: Ignoring unknown parameter type:', opt.in)
+      } else {
+        paramByType[opt.in].push({key: sanitizedOpt, ref: `opt['${sanitizedOpt}']`, definition: opt})
+      }
     }
 
     write(
