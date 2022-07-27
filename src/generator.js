@@ -186,23 +186,19 @@ function Generator(specLocation, cmdName) {
     }
 
     write(
-      `    const globalOpts = getGlobalOptions()\n`,
-      `    if (globalOpts.auth) headers.Authorization = globalOpts.auth\n\n`,
-      `    const requestType = globalOpts.debug ? 'debug' : 'request'\n`,
-      `    request('${sanitizeString(method)}', globalOpts.server ?? defaultServer, '${sanitizeString(path)}', {\n`,
-      `      pathParams, queryParams, headers,\n`,
+      `    request('${sanitizeString(method)}', defaultServer, '${sanitizeString(path)}', {pathParams, queryParams, headers`,
     )
 
     if (bodyLocation) {
       write(
-        `      body: await fs.readFile(${bodyLocation === 'argument'? 'args[args.length - 3]' : "opt['body']"}, 'utf-8'),\n`,
+        `,\n      body: await fs.readFile(${bodyLocation === 'argument'? 'args[args.length - 3]' : "opt['body']"}, 'utf-8'),\n`,
         `      contentType: opt.bodyType || '${sanitizeString(defaultContentType)}'\n`,
+        `    })\n\n`,
       )
+    } else {
+      write(`})\n\n`)
     }
-    write(
-      `    }, requestType)\n`,
-      `  })\n\n`
-    )
+    write(`  })\n\n`)
   }
 
   function generateArguments(args) {

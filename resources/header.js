@@ -29,7 +29,11 @@ function httpRequest(url, {method, body, headers}) {
   })
 }
 
-async function request(method, baseUrl, path, { pathParams, queryParams, headers, body, contentType }, requestImpl) {
+async function request(method, defaultServer, path, { pathParams, queryParams, headers, body, contentType }) {
+  const globalOpts = getGlobalOptions()
+  const baseUrl = globalOpts.server ?? defaultServer
+  if (globalOpts.auth) headers.Authorization = globalOpts.auth
+
   try {
     var fullUrl = new URL(baseUrl)
   } catch (err) {
@@ -50,7 +54,7 @@ async function request(method, baseUrl, path, { pathParams, queryParams, headers
   if (body) headers['Content-Type'] = contentType
   headers['Accept'] = 'application/json'
 
-  if (requestImpl === 'debug') {
+  if (globalOpts.debug) {
     console.log(method.toUpperCase(), fullUrl.toString())
     for (const [name, value] of Object.entries(headers)) {
       console.log(`${name}: ${value}`)

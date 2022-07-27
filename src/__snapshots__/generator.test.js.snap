@@ -32,7 +32,11 @@ function httpRequest(url, {method, body, headers}) {
   })
 }
 
-async function request(method, baseUrl, path, { pathParams, queryParams, headers, body, contentType }, requestImpl) {
+async function request(method, defaultServer, path, { pathParams, queryParams, headers, body, contentType }) {
+  const globalOpts = getGlobalOptions()
+  const baseUrl = globalOpts.server ?? defaultServer
+  if (globalOpts.auth) headers.Authorization = globalOpts.auth
+
   try {
     var fullUrl = new URL(baseUrl)
   } catch (err) {
@@ -53,7 +57,7 @@ async function request(method, baseUrl, path, { pathParams, queryParams, headers
   if (body) headers['Content-Type'] = contentType
   headers['Accept'] = 'application/json'
 
-  if (requestImpl === 'debug') {
+  if (globalOpts.debug) {
     console.log(method.toUpperCase(), fullUrl.toString())
     for (const [name, value] of Object.entries(headers)) {
       console.log(\`\${name}: \${value}\`)
@@ -117,15 +121,11 @@ updatePet
     const headers = {}
     const pathParams = {}
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
-
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('put', globalOpts.server ?? defaultServer, '/pet', {
-      pathParams, queryParams, headers,
+    request('put', defaultServer, '/pet', {pathParams, queryParams, headers,
       body: await fs.readFile(args[args.length - 3], 'utf-8'),
       contentType: opt.bodyType || 'application/json'
-    }, requestType)
+    })
+
   })
 
 const addPet = pet.command('addPet')
@@ -139,15 +139,11 @@ addPet
     const headers = {}
     const pathParams = {}
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
-
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('post', globalOpts.server ?? defaultServer, '/pet', {
-      pathParams, queryParams, headers,
+    request('post', defaultServer, '/pet', {pathParams, queryParams, headers,
       body: await fs.readFile(args[args.length - 3], 'utf-8'),
       contentType: opt.bodyType || 'application/json'
-    }, requestType)
+    })
+
   })
 
 const findPetsByStatus = pet.command('findPetsByStatus')
@@ -161,13 +157,8 @@ findPetsByStatus
     const pathParams = {}
     const queryParams = []
     queryParams.push(['status', opt['status']])
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/pet/findByStatus', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/pet/findByStatus', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const findPetsByTags = pet.command('findPetsByTags')
@@ -180,13 +171,8 @@ findPetsByTags
     const pathParams = {}
     const queryParams = []
     if (opt['tags']) opt['tags'].forEach(p => queryParams.push(['tags', p]))
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/pet/findByTags', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/pet/findByTags', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const getPetById = pet.command('getPetById')
@@ -199,13 +185,8 @@ getPetById
     const pathParams = {}
     pathParams['petId'] = args[0]
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/pet/{petId}', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/pet/{petId}', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const updatePetWithForm = pet.command('updatePetWithForm')
@@ -222,13 +203,8 @@ updatePetWithForm
     const queryParams = []
     queryParams.push(['name', opt['name']])
     queryParams.push(['status', opt['status']])
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('post', defaultServer, '/pet/{petId}', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('post', globalOpts.server ?? defaultServer, '/pet/{petId}', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const deletePet = pet.command('deletePet')
@@ -243,13 +219,8 @@ deletePet
     const pathParams = {}
     pathParams['petId'] = args[0]
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('delete', defaultServer, '/pet/{petId}', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('delete', globalOpts.server ?? defaultServer, '/pet/{petId}', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const uploadFile = pet.command('uploadFile')
@@ -266,15 +237,11 @@ uploadFile
     pathParams['petId'] = args[0]
     const queryParams = []
     queryParams.push(['additionalMetadata', opt['additionalMetadata']])
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
-
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('post', globalOpts.server ?? defaultServer, '/pet/{petId}/uploadImage', {
-      pathParams, queryParams, headers,
+    request('post', defaultServer, '/pet/{petId}/uploadImage', {pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/octet-stream'
-    }, requestType)
+    })
+
   })
 
 /* ============== store ============== */
@@ -287,13 +254,8 @@ getInventory
     const headers = {}
     const pathParams = {}
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/store/inventory', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/store/inventory', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const placeOrder = store.command('placeOrder')
@@ -308,15 +270,11 @@ placeOrder
     const headers = {}
     const pathParams = {}
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
-
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('post', globalOpts.server ?? defaultServer, '/store/order', {
-      pathParams, queryParams, headers,
+    request('post', defaultServer, '/store/order', {pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'
-    }, requestType)
+    })
+
   })
 
 const getOrderById = store.command('getOrderById')
@@ -329,13 +287,8 @@ getOrderById
     const pathParams = {}
     pathParams['orderId'] = args[0]
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/store/order/{orderId}', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/store/order/{orderId}', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const deleteOrder = store.command('deleteOrder')
@@ -348,13 +301,8 @@ deleteOrder
     const pathParams = {}
     pathParams['orderId'] = args[0]
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('delete', defaultServer, '/store/order/{orderId}', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('delete', globalOpts.server ?? defaultServer, '/store/order/{orderId}', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 /* ============== user ============== */
@@ -373,15 +321,11 @@ createUser
     const headers = {}
     const pathParams = {}
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
-
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('post', globalOpts.server ?? defaultServer, '/user', {
-      pathParams, queryParams, headers,
+    request('post', defaultServer, '/user', {pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'
-    }, requestType)
+    })
+
   })
 
 const createUsersWithListInput = user.command('createUsersWithListInput')
@@ -394,15 +338,11 @@ createUsersWithListInput
     const headers = {}
     const pathParams = {}
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
-
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('post', globalOpts.server ?? defaultServer, '/user/createWithList', {
-      pathParams, queryParams, headers,
+    request('post', defaultServer, '/user/createWithList', {pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'
-    }, requestType)
+    })
+
   })
 
 const loginUser = user.command('loginUser')
@@ -417,13 +357,8 @@ loginUser
     const queryParams = []
     queryParams.push(['username', opt['username']])
     queryParams.push(['password', opt['password']])
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/user/login', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/user/login', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const logoutUser = user.command('logoutUser')
@@ -433,13 +368,8 @@ logoutUser
     const headers = {}
     const pathParams = {}
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/user/logout', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/user/logout', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const getUserByName = user.command('getUserByName')
@@ -451,13 +381,8 @@ getUserByName
     const pathParams = {}
     pathParams['username'] = args[0]
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('get', defaultServer, '/user/{username}', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('get', globalOpts.server ?? defaultServer, '/user/{username}', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 const updateUser = user.command('updateUser')
@@ -474,15 +399,11 @@ updateUser
     const pathParams = {}
     pathParams['username'] = args[0]
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
-
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('put', globalOpts.server ?? defaultServer, '/user/{username}', {
-      pathParams, queryParams, headers,
+    request('put', defaultServer, '/user/{username}', {pathParams, queryParams, headers,
       body: await fs.readFile(opt['body'], 'utf-8'),
       contentType: opt.bodyType || 'application/json'
-    }, requestType)
+    })
+
   })
 
 const deleteUser = user.command('deleteUser')
@@ -495,13 +416,8 @@ deleteUser
     const pathParams = {}
     pathParams['username'] = args[0]
     const queryParams = []
-    const globalOpts = getGlobalOptions()
-    if (globalOpts.auth) headers.Authorization = globalOpts.auth
+    request('delete', defaultServer, '/user/{username}', {pathParams, queryParams, headers})
 
-    const requestType = globalOpts.debug ? 'debug' : 'request'
-    request('delete', globalOpts.server ?? defaultServer, '/user/{username}', {
-      pathParams, queryParams, headers,
-    }, requestType)
   })
 
 if (require.main === module) {
