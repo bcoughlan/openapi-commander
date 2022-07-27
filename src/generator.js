@@ -186,7 +186,7 @@ function Generator(specLocation, cmdName) {
     }
 
     write(
-      `    request('${sanitizeString(method)}', defaultServer, '${sanitizeString(path)}', {pathParams, queryParams, headers`,
+      `    await request('${sanitizeString(method)}', defaultServer, '${sanitizeString(path)}', {pathParams, queryParams, headers`,
     )
 
     if (bodyLocation) {
