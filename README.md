@@ -71,6 +71,8 @@ Status: 200
 }
 ```
 
+You can also add the `-v` flag to show response headers.
+
 ## Global options
 
 ### Custom server
