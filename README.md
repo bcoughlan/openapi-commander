@@ -2,9 +2,46 @@
 
 Generate a Node.js command line tool from an OpenAPI definition using the [commander](https://www.npmjs.com/package/commander) library.
 
-# Example usage
+For anyone who hates navigating REST APIs with curl.
 
-## Usage: Subcommands grouped by tags
+# Features
+
+- Generate clean code from your spec.
+- Supports Swagger 2, OpenAPI 3.0 and 3.1.
+- Show examples of request bodies, using examples from the spec or generated wit [openapi-sampler](https://github.com/Redocly/openapi-sampler).
+- Verbose mode to see response headers.
+
+# Setup
+
+1. Create an npm project with `npm init` or use an existing one. Your Node.js version must be 16+
+
+2. Install dependencies
+
+```
+npm install commander@9
+npm install --save-dev openapi-commander
+```
+
+3. Generate the CLI code
+
+```
+npx openapi-commander generate <path or URL to spec> <output file>
+```
+
+e.g.
+
+```
+npx openapi-commander generate https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.yaml petstore.js
+```
+
+4. Run
+
+```
+node petstore.js ...
+```
+# Examples
+
+## Commands grouped by tag
 
 ```
 ~/petstore$ node petstore.js
@@ -123,35 +160,6 @@ Example for application/json:
   ],
   "status": "available"
 }
-```
-
-# Setup
-
-1. Create an npm project with `npm init` or use an existing one. Your Node.js version must be 16+
-
-2. Install dependencies
-
-```
-npm install commander@9
-npm install --save-dev openapi-commander
-```
-
-3. Generate the CLI code
-
-```
-npx openapi-commander generate <path or URL to spec> <output file>
-```
-
-e.g.
-
-```
-npx openapi-commander generate https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.yaml petstore.js
-```
-
-4. Run
-
-```
-node petstore.js ...
 ```
 
 # Build standalone binaries

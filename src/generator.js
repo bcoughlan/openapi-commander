@@ -1,10 +1,10 @@
-const SwaggerParser = require('@apidevtools/swagger-parser')
 const fs = require('fs/promises')
 const path = require('path')
 const { sanitizeCommand, sanitizeComment, sanitizeString, sanitizeVariable } = require('./sanitize')
 const { groupEndpointsByFirstTag, getExamples, getTags } = require('./spec-utils')
 const { trimDescription } = require('./utils')
 const _ = require('lodash')
+const { parseSpec } = require('./parse')
 
 const globalFlags = new Set(['v', 'verbose', 'd', 'debug', 's', 'server'])
 
@@ -42,7 +42,7 @@ function Generator(specLocation, cmdName) {
   function write(...args) { output.push(...args) }
 
   async function generate() {
-    const api = await SwaggerParser.dereference(specLocation)
+    const api = await parseSpec(specLocation)
 
     write((await fs.readFile(path.join(__dirname, '../resources/header.js'), 'utf8'))
       .replace('COMMAND_NAME_TO_BE_REPLACED', sanitizeString(cmdName))
