@@ -71,6 +71,12 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
     const response = await httpRequest(fullUrl.toString(), {method, body, headers})
     console.error(\\"Status:\\", response.status) //stderr so body can be piped
     
+    if (globalOpts.verbose) {
+      for (const [key, value] of Object.entries(response.headers)) {
+        console.log(\`\${key}: \${value}\`)
+      }
+    }
+
     if (response.headers['content-type']?.startsWith('application/json')) {
       try {
         console.log(JSON.stringify(JSON.parse(response.body), null, 2))
@@ -101,6 +107,7 @@ function getGlobalOptions() {
 }
 
 program.option('-d, --debug', 'Print the HTTP request instead of sending it')
+program.option('-v, --verbose', 'Includes the response headers in the output')
 program.option('-s, --server <server>', 'Base URL to use for requests')
 program.option('-a, --auth <auth>', 'Authorization header to send')
 const defaultServer = 'https://petstore3.swagger.io/api/v3'

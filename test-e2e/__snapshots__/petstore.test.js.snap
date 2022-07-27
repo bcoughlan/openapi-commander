@@ -42,6 +42,7 @@ Object {
 
 Options:
   -d, --debug            Print the HTTP request instead of sending it
+  -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
   -h, --help             display help for command

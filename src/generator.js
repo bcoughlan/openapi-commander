@@ -6,7 +6,7 @@ const { groupEndpointsByFirstTag, getExamples, getTags } = require('./spec-utils
 const { trimDescription } = require('./utils')
 const _ = require('lodash')
 
-const globalFlags = new Set(['d', 'debug', 's', 'server'])
+const globalFlags = new Set(['v', 'verbose', 'd', 'debug', 's', 'server'])
 
 const reservedKeywords = [
   "break",  "case",  "catch",  "class",  "const",  "continue",  "debugger",  "default",  "delete",  "do",  "else", 
