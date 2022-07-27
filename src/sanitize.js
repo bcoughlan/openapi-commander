@@ -2,9 +2,10 @@ const { camelCase } = require('lodash')
 
 
 /*
- * Sanitize a string for use in a single-quote Javascript string
+ * Sanitize a variable for use in a single-quote Javascript string
  */
 function sanitizeString(str) {
+  if (typeof str === 'number') return str.toString()
   if (!str) return ''
   return str.replace(/\\/, '\\\\').replace(/'/g, "\\'").replace(/\n/g, "\\n")
 }
