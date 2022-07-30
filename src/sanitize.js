@@ -7,7 +7,7 @@ const { camelCase } = require('lodash')
 function sanitizeString(str) {
   if (typeof str === 'number') return str.toString()
   if (!str) return ''
-  return str.replace(/\\/, '\\\\').replace(/'/g, "\\'").replace(/\n/g, "\\n")
+  return str.replace(/\\/, '\\\\').replace(/'/g, "\\'").replace(/\r\n/g, "\\n").replace(/\n/g, "\\n")
 }
 
 /*
