@@ -19,20 +19,23 @@ const reservedKeywords = [
 function UniqueVarGenerator(initial) {
   const used = new Set(initial) ?? new Set()
 
-  return (name) => {
-    name = sanitizeVariable(name)
+  return {
+    var: (name) => {
+      name = sanitizeVariable(name)
 
-    if (!used.has(name) && !reservedKeywords.includes(name)) {
-      used.add(name)
-      return name
-    }
-
-    for (let i = 1; ; i++) {
-      if (!used.has(name + i)) {
-        used.add(name + i)
-        return name + i
+      if (!used.has(name) && !reservedKeywords.includes(name)) {
+        used.add(name)
+        return name
       }
-    }
+
+      for (let i = 1; ; i++) {
+        if (!used.has(name + i)) {
+          used.add(name + i)
+          return name + i
+        }
+      }
+    },
+    isUsed: (name) => used.has(name)
   }
 }
 
@@ -54,7 +57,7 @@ function Generator(specLocation, cmdName) {
     for (const tag of getTags(api, endpointsByTag)) {
 
       write(`/* ============== ${sanitizeComment(tag.name)} ============== */\n`)
-      const cmdVar = rootUniqueVars(tag.name)
+      const cmdVar = rootUniqueVars.var(tag.name)
       generateTagCommand(cmdVar, tag.description)
 
       for (const { parameters, path, method, operation } of endpointsByTag[tag.name]) {
@@ -64,7 +67,7 @@ function Generator(specLocation, cmdName) {
           }
 
           const examples = getExamples(operation)
-          const commandName = rootUniqueVars(operation.operationId)
+          const commandName = rootUniqueVars.var(operation.operationId)
 
           const isArgument = p => p.schema?.type !== 'array' && p.required && !Object.prototype.hasOwnProperty.call(p, 'default')
           const options = parameters.filter(p => !isArgument(p))
@@ -217,20 +220,19 @@ function Generator(specLocation, cmdName) {
     const uniqueOptions = new UniqueVarGenerator(globalFlags)
 
     for (const option of options) {
-      //TODO - --var1 and -v1 are not great user experience
-      const name = uniqueOptions(option.name)
-      const shortName = uniqueOptions(option.name[0])
+      const name = uniqueOptions.var(option.name)
+      const shortName = uniqueOptions.isUsed(option.name[0]) ? '' : `-${option.name[0]} `
       const description = sanitizeString(option.description)
 
       if (option.schema?.type === 'array') {
         const choices = option.schema?.items?.enum ? 'choices: ' + option.schema.items.enum.map(e => sanitizeString(e)).join(',') : ''
-        write(`  .addOption(new Option('-${shortName} --${name} <${name}>', 'Comma-separated list. ${description} ${choices}').argParser(v => v.split(','))`)
+        write(`  .addOption(new Option('${shortName}--${name} <${name}>', 'Comma-separated list. ${description} ${choices}').argParser(v => v.split(','))`)
         //TODO 'choices' doesn't work together with 'argParser'
         // if (option.schema?.items?.enum) {
           //write(`.choices([${option.schema.items.enum.map(e => `'${sanitizeString(e)}'`).join(', ')}])`)
         // }
       } else {
-        write(`  .addOption(new Option('-${shortName} --${name} <${name}>', '${description}')`)
+        write(`  .addOption(new Option('${shortName}--${name} <${name}>', '${description}')`)
         if (option.schema?.enum) {
           write(`.choices([${option.schema.enum.map(e => `'${sanitizeString(e)}'`).join(', ')}])`)
         }
