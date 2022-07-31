@@ -13,11 +13,11 @@ describe('Query params', () => {
   })
 
   it('arrays: explodes by default', async () => {
-    expect((await generatorTest.run('test testArrayDefaults -d --types one,two')).stdout).toContain('?types=one&types=two')
+    expect((await generatorTest.run('test testArrayDefaults -p plain --types one,two')).stdout).toContain('?types=one&types=two')
   })
 
   it('arrays: respects explode:false', async () => {
-    expect((await generatorTest.run('test testExplodeFalse -d --types one,two')).stdout).toContain('?types=one%2Ctwo')
+    expect((await generatorTest.run('test testExplodeFalse -p plain --types one,two')).stdout).toContain('?types=one%2Ctwo')
   })
 
 })

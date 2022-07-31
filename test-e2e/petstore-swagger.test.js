@@ -22,7 +22,7 @@ describe('Petstore Swagger 2', () => {
   })
 
   it('debug prints', async () => {
-    expect(await generatorTest.run('-d pets listPets')).toMatchSnapshot()
+    expect(await generatorTest.run('-p plain pets listPets')).toMatchSnapshot()
   })
 
 })

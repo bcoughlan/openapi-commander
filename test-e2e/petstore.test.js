@@ -1,4 +1,5 @@
 const fs = require('fs/promises')
+const path = require('path')
 const express = require('express')
 const { GeneratorTest } = require('./test-utils')
 
@@ -49,7 +50,17 @@ describe('Petstore', () => {
   })
 
   it('debug prints', async () => {
-    expect(await generatorTest.run('-d pet getPetById 10')).toMatchSnapshot()
+    expect(await generatorTest.run('-p plain pet getPetById 10')).toMatchSnapshot()
+  })
+
+  it('prints a curl GET request', async () => {
+    expect(await generatorTest.run('-p curl pet getPetById 10')).toMatchSnapshot()
+  })
+
+  it('prints a curl POST request', async () => {
+    const bodyPath = path.join(generatorTest.tmpPath, 'post.json')
+    await fs.writeFile(bodyPath, JSON.stringify({ id: 1, name: 'doggie' }))
+    expect(await generatorTest.run(`-p curl  -a "Bearer mytoken" pet addPet ${bodyPath}`)).toMatchSnapshot()
   })
 
   it('prints examples', async () => {

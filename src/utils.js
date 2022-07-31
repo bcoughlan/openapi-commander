@@ -7,4 +7,9 @@ function trimDescription(str) {
   return lines[0]
 }
 
-module.exports = {trimDescription}
+/** Escape arg for shell */
+function shellEscape(str) {
+  return "'" + str.replace("'", "'\\''") + "'"
+}
+
+module.exports = {trimDescription, shellEscape}

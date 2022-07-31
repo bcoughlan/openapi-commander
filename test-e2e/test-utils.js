@@ -5,8 +5,6 @@ const exec = util.promisify(require('node:child_process').exec)
 const tmpPromise = require('tmp-promise')
 
 async function GeneratorTest(inputFile, {defaultServer} = {}) {
-
-  
   const {path: tmpPath, cleanup} = await tmpPromise.dir({ unsafeCleanup: true })
   const outputFile = path.join(tmpPath, path.basename(inputFile, '.yaml') + '.js')
   await exec(`node bin/run.js generate ${inputFile} ${outputFile}`)
@@ -24,7 +22,7 @@ async function GeneratorTest(inputFile, {defaultServer} = {}) {
     }
   }
 
-  return {run, cleanup}
+  return {run, cleanup, tmpPath}
 }
 
 module.exports = { GeneratorTest }

@@ -10,6 +10,7 @@ For anyone who hates navigating REST APIs with curl.
 - Supports Swagger 2, OpenAPI 3.0 and 3.1.
 - Show examples of request bodies, using examples from the spec or generated wit [openapi-sampler](https://github.com/Redocly/openapi-sampler).
 - Verbose mode to see response headers.
+- Print a curl command of the request.
 
 # Setup
 
@@ -49,7 +50,7 @@ node petstore.js ...
 Usage: petstore [options] [command]
 
 Options:
-  -d, --debug            Print the HTTP request instead of sending it
+  -p, --print <mode>     Print the HTTP request instead of sending it. (choices: "curl", "plain")
   -s, --server <server>  Server to use
   -a, --auth <auth>      Authorization header to send
   -h, --help             display help for command
@@ -128,13 +129,20 @@ Alternatively you can override it by setting the environment variable `{COMMANDN
 
 Alternatively you can override it by setting the environment variable `{COMMANDNAME}_AUTH`, e.g. `PETSTORE_AUTH`.
 
-### Debug - show request without sending
+### Print request without sending
 
 ```
-~/petstore$ node petstore.js pet -a 'Bearer mytoken' -s https://mypetstore.example getPetById 1 --debug
+~/petstore$ node petstore.js pet -a 'Bearer mytoken' -s https://mypetstore.example getPetById 1 --print plain
 GET https://mypetstore.example/pet/1
 Authorization: Bearer mytoken
 Accept: application/json
+```
+
+### Print a curl command of the request
+
+```
+~/petstore$ node petstore.js pet -a 'Bearer mytoken' -s https://mypetstore.example getPetById 1 --print curl
+curl -X GET -H 'Authorization: Bearer mytoken' -H 'Accept: application/json' 'https://mypetstore.example/pet/1'
 ```
 
 ## Print example request bodies
@@ -173,7 +181,6 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
 - Auto-detect request body type from file.
 - Show JSON & YAML examples with comments for field descriptions.
   -> Strip comments from JSON when passing in
-- Ability to print out a curl command instead of fetching e.g. --debug=curl https://github.com/xxorax/node-shell-escape/blob/master/README.md
 - Strip html/markdown from description
 - More serialization options https://swagger.io/docs/specification/serialization/
 - application/x-www-form-urlencoded content types.

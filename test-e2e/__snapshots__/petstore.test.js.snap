@@ -41,7 +41,8 @@ Object {
   "stdout": "Usage: petstore [options] [command]
 
 Options:
-  -d, --debug            Print the HTTP request instead of sending it
+  -p, --print <mode>     Print the HTTP request instead of sending it.
+                         (choices: \\"curl\\", \\"plain\\")
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
@@ -101,6 +102,22 @@ Options:
 
 Commands:
   examples
+",
+}
+`;
+
+exports[`Petstore prints a curl GET request 1`] = `
+Object {
+  "stderr": "",
+  "stdout": "curl -X GET -H 'Accept: application/json' 'http://localhost:3123/pet/10'
+",
+}
+`;
+
+exports[`Petstore prints a curl POST request 1`] = `
+Object {
+  "stderr": "",
+  "stdout": "curl -X POST -H 'Authorization: Bearer mytoken' -H 'Content-Type: application/json' -H 'Accept: application/json' 'http://localhost:3123/pet' -d '{\\"id\\":1,\\"name\\":\\"doggie\\"}'
 ",
 }
 `;

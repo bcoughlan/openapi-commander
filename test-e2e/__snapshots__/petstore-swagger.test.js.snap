@@ -16,7 +16,8 @@ Object {
   "stdout": "Usage: petstore-swagger [options] [command]
 
 Options:
-  -d, --debug            Print the HTTP request instead of sending it
+  -p, --print <mode>     Print the HTTP request instead of sending it.
+                         (choices: \\"curl\\", \\"plain\\")
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send

@@ -12,14 +12,14 @@ const COMMAND_NAME_ENV_VARS = 'COMMAND_NAME_ENV_VARS_TO_BE_REPLACED'
 
 const program = new Command(COMMAND_NAME)
 
-function httpRequest(url, {method, body, headers}) {
+function httpRequest(url, { method, body, headers }) {
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? require('https') : require('http')
-    const request = client.request(url, {headers, method}, (response) => {
+    const request = client.request(url, { headers, method }, (response) => {
       const body = []
       response.on('data', (chunk) => body.push(chunk))
       response.on('end', () => {
-        resolve({body: body.join(''), status: response.statusCode, headers: response.headers})
+        resolve({ body: body.join(''), status: response.statusCode, headers: response.headers })
       })
     })
     request.on('aborted', (err) => reject(err))
@@ -54,7 +54,20 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
   if (body) headers['Content-Type'] = contentType
   headers['Accept'] = 'application/json'
 
-  if (globalOpts.debug) {
+  if (globalOpts.print === 'curl') {
+    const shellEscape = function (str) {
+      return "'" + str.replace("'", "'\\''") + "'"
+    }
+
+    const curl = ['curl']
+    if (method !== 'GET') curl.push(`-X ${method.toUpperCase()}`)
+    for (const [key, value] of Object.entries(headers)) {
+      curl.push(`-H ${shellEscape(`${key}: ${value}`)}`)
+    }
+    curl.push(shellEscape(fullUrl.toString()))
+    if (body) curl.push(`-d ${shellEscape(body)}`)
+    console.log(curl.join(' '))
+  } else if (globalOpts.print === 'plain') {
     console.log(method.toUpperCase(), fullUrl.toString())
     for (const [name, value] of Object.entries(headers)) {
       console.log(`${name}: ${value}`)
@@ -65,9 +78,9 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
     }
   } else {
     // eslint-disable-next-line no-undef
-    const response = await httpRequest(fullUrl.toString(), {method, body, headers})
+    const response = await httpRequest(fullUrl.toString(), { method, body, headers })
     console.error("Status:", response.status) //stderr so body can be piped
-    
+
     if (globalOpts.verbose) {
       for (const [key, value] of Object.entries(response.headers)) {
         console.log(`${key}: ${value}`)
@@ -103,7 +116,8 @@ function getGlobalOptions() {
   return opts
 }
 
-program.option('-d, --debug', 'Print the HTTP request instead of sending it')
+program.addOption(new Option('-p, --print <mode>', 'Print the HTTP request instead of sending it.')
+  .choices(['curl', 'plain']))
 program.option('-v, --verbose', 'Includes the response headers in the output')
 program.option('-s, --server <server>', 'Base URL to use for requests')
 program.option('-a, --auth <auth>', 'Authorization header to send')
