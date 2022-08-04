@@ -14,11 +14,15 @@ function getTags(api, endpointsByTag) {
   return tags
 }
 
-function alwaysHighlight(str) {
+/**
+ * Syntax highlighting regardless of terminal settings.
+ * TODO: This FORCE_COLOR override trick does not work.
+ */
+function alwaysHighlight(str, opts) {
   //chalk library disables color if it's piped or not a TTY stream
   const old = process.env['FORCE_COLOR']
   process.env['FORCE_COLOR'] = '2'
-  const ret = highlight(str, { language: 'javascript' })
+  const ret = highlight(str, opts)
   process.env['FORCE_COLOR'] = old
   return ret
 }
@@ -53,13 +57,14 @@ function getExamples(operation) {
   }
   if (found) return examples
 
-  //Auto-generate examples for specs that don't define exxamples
+  //Auto-generate examples for specs that don't define examples
   const sampler = {}
   for (const [contentType, mediaType] of Object.entries(content)) {
     if (mediaType.schema) {
       sampler[contentType] = [renderExample(OpenAPISampler.sample(mediaType.schema), contentType)]
     }
   }
+  
   return sampler
 }
 

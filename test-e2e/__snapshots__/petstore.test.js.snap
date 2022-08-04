@@ -127,22 +127,22 @@ Object {
   "stderr": "",
   "stdout": "Example for application/json:
 {
-  [31m\\"id\\"[39m: [32m10[39m,
-  [31m\\"name\\"[39m: [31m\\"doggie\\"[39m,
-  [31m\\"category\\"[39m: {
-    [31m\\"id\\"[39m: [32m1[39m,
-    [31m\\"name\\"[39m: [31m\\"Dogs\\"[39m
+  [36m\\"id\\"[39m: [32m10[39m,
+  [36m\\"name\\"[39m: [31m\\"doggie\\"[39m,
+  [36m\\"category\\"[39m: {
+    [36m\\"id\\"[39m: [32m1[39m,
+    [36m\\"name\\"[39m: [31m\\"Dogs\\"[39m
   },
-  [31m\\"photoUrls\\"[39m: [
+  [36m\\"photoUrls\\"[39m: [
     [31m\\"string\\"[39m
   ],
-  [31m\\"tags\\"[39m: [
+  [36m\\"tags\\"[39m: [
     {
-      [31m\\"id\\"[39m: [32m0[39m,
-      [31m\\"name\\"[39m: [31m\\"string\\"[39m
+      [36m\\"id\\"[39m: [32m0[39m,
+      [36m\\"name\\"[39m: [31m\\"string\\"[39m
     }
   ],
-  [31m\\"status\\"[39m: [31m\\"available\\"[39m
+  [36m\\"status\\"[39m: [31m\\"available\\"[39m
 }
 Example for application/xml:
 {
