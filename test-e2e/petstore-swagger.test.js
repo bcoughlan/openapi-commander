@@ -1,5 +1,3 @@
-const fs = require('fs/promises')
-const express = require('express')
 const { GeneratorTest } = require('./test-utils')
 
 describe('Petstore Swagger 2', () => {
