@@ -4,7 +4,7 @@ exports[`Petstore Swagger 2 debug prints 1`] = `
 Object {
   "stderr": "",
   "stdout": "GET http://petstore.swagger.io/v1/pets
-Accept: application/json
+Accept: */*
 ",
 }
 `;

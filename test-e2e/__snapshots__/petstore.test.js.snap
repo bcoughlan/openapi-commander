@@ -29,7 +29,7 @@ exports[`Petstore debug prints 1`] = `
 Object {
   "stderr": "",
   "stdout": "GET http://localhost:3123/pet/10
-Accept: application/json
+Accept: */*
 ",
 }
 `;
@@ -94,7 +94,7 @@ Arguments:
   body                    Path to a file containing the request body.
 
 Options:
-  --body-type <bodyType>  Content type of the body file (choices:
+  --body-type <bodyType>  Content type of the request body. (choices:
                           \\"application/json\\", \\"application/xml\\",
                           \\"application/x-www-form-urlencoded\\", default:
                           \\"application/json\\")
@@ -109,7 +109,7 @@ Commands:
 exports[`Petstore prints a curl GET request 1`] = `
 Object {
   "stderr": "",
-  "stdout": "curl -X GET -H 'Accept: application/json' 'http://localhost:3123/pet/10'
+  "stdout": "curl -X GET -H 'Accept: */*' 'http://localhost:3123/pet/10'
 ",
 }
 `;
@@ -117,7 +117,7 @@ Object {
 exports[`Petstore prints a curl POST request 1`] = `
 Object {
   "stderr": "",
-  "stdout": "curl -X POST -H 'Authorization: Bearer mytoken' -H 'Content-Type: application/json' -H 'Accept: application/json' 'http://localhost:3123/pet' -d '{\\"id\\":1,\\"name\\":\\"doggie\\"}'
+  "stdout": "curl -X POST -H 'Authorization: Bearer mytoken' -H 'Content-Type: application/json' -H 'Accept: */*' 'http://localhost:3123/pet' -d '{\\"id\\":1,\\"name\\":\\"doggie\\"}'
 ",
 }
 `;

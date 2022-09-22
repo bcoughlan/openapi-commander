@@ -5,6 +5,7 @@ const { groupEndpointsByFirstTag, getExamples, getTags } = require('./spec-utils
 const { trimDescription } = require('./utils')
 const _ = require('lodash')
 const { parseSpec } = require('./parse')
+const { type } = require('os')
 
 const globalFlags = new Set(['v', 'verbose', 'p', 'print', 's', 'server'])
 
@@ -73,14 +74,14 @@ function Generator(specLocation, cmdName) {
           const options = parameters.filter(p => !isArgument(p))
           const args = parameters.filter(p => isArgument(p))
 
-          const bodyLocation = !operation.requestBody ? null : (operation.requestBody.required) ? 'argument' : 'option'
           const defaultContentType = Object.keys(operation.requestBody?.content ?? {})?.[0]
 
           generateCommand(commandName, cmdVar, operation, examples)
           generateArguments(args)
           if (operation.requestBody) generateBody(operation.requestBody)
           generateOptions(options)
-          generateAction(args, options, method, path, bodyLocation, defaultContentType)
+          const paramByType = getParameterReferences(args, operation, options)
+          generateAction(paramByType, options, method, path, defaultContentType)
         } catch (err) {
           //Add context for errors
           if (err.message) err.message = `Error processing ${method.toUpperCase()} ${path}: ${err.message}`
@@ -128,59 +129,46 @@ function Generator(specLocation, cmdName) {
   }
 
   function generateBody(requestBody) {
+    const types = Object.keys(requestBody.content)
+    if (types.some(t => t.includes('*'))) {
+      //Wildcard types - being a bit lazy and just not enforcing choices in that case
+      write(`  .addArgument(new Argument('<bodyType>', 'Content type of the request body.'))\n`)
+    } else if (types.length > 1) {
+      write(`  .addOption(new Option('--body-type <bodyType>', 'Content type of the request body.')`, 
+        `.choices(${JSON.stringify(types)}).default('${sanitizeString(types[0])}'))\n`)
+    }
+
     if (requestBody.required) {
       write(`  .addArgument(new Argument('<body>', 'Path to a file containing the request body.'))\n`)
     } else {
       write(`  .addOption(new Option('--body <body>', 'Path to a file containing the request body.'))\n`)
     }
-
-    const types = Object.keys(requestBody.content)
-    if (types.length > 1) {
-      write(`  .addOption(new Option('--body-type <bodyType>', 'Content type of the body file').choices(${JSON.stringify(types)}).default('${sanitizeString(types[0])}'))\n`)
-    }
   }
 
-  function generateAction(args, options, method, path, bodyLocation, defaultContentType) {
-    const paramByType = { 'query': [], 'path': [], 'header': [], 'cookie': [] }
-    for (const [i, arg] of args.entries()) {
-      if (!paramByType[arg.in]) {
-        console.log('WARNING: Ignoring unknown parameter type:', arg.in)
-      } else {
-        paramByType[arg.in].push({key: sanitizeString(arg.name), ref: `args[${i}]`, definition: arg})
-      }
-    }
-    for (const opt of options) {
-      const sanitizedOpt = sanitizeString(opt.name)
-      if (!paramByType[opt.in]) {
-        console.log('WARNING: Ignoring unknown parameter type:', opt.in)
-      } else {
-        paramByType[opt.in].push({key: sanitizedOpt, ref: `opt['${sanitizedOpt}']`, definition: opt})
-      }
-    }
-
+  function generateAction(codeRefs, options, method, path, defaultContentType) {
     write(
       `  .action(async function(...args) {\n`,
     )
 
-    if (bodyLocation || options.length > 0) {
+    if (codeRefs.body || options.length > 0) {
       write(
+        // commands passes (arg1, arg2, ... argN, options, commander object)
         `    const opt = args[args.length - 2]\n`,
       )
     }
 
     write(`    const headers = {}\n`,)
-    for (const {key, ref} of paramByType['header']) {
+    for (const {key, ref} of codeRefs['header']) {
       write(`    if (${ref} !== undefined && ${ref} !== null) headers['${key}'] = ${ref}\n`)
     }
 
-
     write(`    const pathParams = {}\n`)
-    for (const {key, ref} of paramByType['path']) {
+    for (const {key, ref} of codeRefs['path']) {
       write(`    pathParams['${key}'] = ${ref}\n`)
     }
 
     write(`    const queryParams = []\n`)
-    for (const {key, ref, definition} of paramByType['query']) {
+    for (const {key, ref, definition} of codeRefs['query']) {
       if (definition.schema?.type === 'array' && definition.explode !== false) {
         write(`    if (${ref}) ${ref}.forEach(p => queryParams.push(['${key}', p]))\n`)
       } else {
@@ -192,10 +180,10 @@ function Generator(specLocation, cmdName) {
       `    await request('${sanitizeString(method)}', defaultServer, '${sanitizeString(path)}', {pathParams, queryParams, headers`,
     )
 
-    if (bodyLocation) {
+    if (codeRefs.body) {
       write(
-        `,\n      body: await fs.readFile(${bodyLocation === 'argument'? 'args[args.length - 3]' : "opt['body']"}, 'utf-8'),\n`,
-        `      contentType: opt.bodyType || '${sanitizeString(defaultContentType)}'\n`,
+        `,\n      body: await fs.readFile(${codeRefs.body}, 'utf-8'),\n`,
+        `      contentType: ${codeRefs.contentType} || '${sanitizeString(defaultContentType)}'\n`,
         `    })\n\n`,
       )
     } else {
@@ -240,6 +228,50 @@ function Generator(specLocation, cmdName) {
       write(')\n')
     }
   }
+
+  /**
+   * Build a data structure describing each argument type to its reference in
+   * the generated code (e.g. "args[0]", "params['id']")
+   */
+  function getParameterReferences(args, operation, options) {
+    const codeRefs = { 'body': null, 'bodyType': null, 'query': [], 'path': [], 'header': [], 'cookie': [] }
+
+    if (operation.requestBody) {
+      //TODO need a nice way to dedupe this logic from generateBody()
+
+      const contentTypeIsArg = Object.keys(operation.requestBody.content).some(t => t.includes('*'))
+      const bodyIsArg = operation.requestBody.required
+      if (contentTypeIsArg) {
+        codeRefs.contentType = `args[args.length - ${bodyIsArg ? '4' : '3'}]`
+      } else {
+        codeRefs.contentType = 'opt.bodyType'
+      }
+
+      if (operation.requestBody.required) {
+        codeRefs.body = `args[args.length - 3]`
+      } else {
+        codeRefs.body = "opt['body']"
+      }
+    }
+
+    for (const [i, arg] of args.entries()) {
+      if (!codeRefs[arg.in]) {
+        console.log('WARNING: Ignoring unknown parameter type:', arg.in)
+      } else {
+        codeRefs[arg.in].push({ key: sanitizeString(arg.name), ref: `args[${i}]`, definition: arg })
+      }
+    }
+    for (const opt of options) {
+      const sanitizedOpt = sanitizeString(opt.name)
+      if (!codeRefs[opt.in]) {
+        console.log('WARNING: Ignoring unknown parameter type:', opt.in)
+      } else {
+        codeRefs[opt.in].push({ key: sanitizedOpt, ref: `opt['${sanitizedOpt}']`, definition: opt })
+      }
+    }
+    return codeRefs
+  }
+
 
   return { generate }
 }

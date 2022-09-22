@@ -52,7 +52,7 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
   }).join('/').slice(1)
 
   if (body) headers['Content-Type'] = contentType
-  headers['Accept'] = 'application/json'
+  headers['Accept'] = '*/*'
 
   if (globalOpts.print === 'curl') {
     const shellEscape = function (str) {
