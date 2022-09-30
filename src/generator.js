@@ -5,7 +5,6 @@ const { groupEndpointsByFirstTag, getExamples, getTags } = require('./spec-utils
 const { trimDescription } = require('./utils')
 const _ = require('lodash')
 const { parseSpec } = require('./parse')
-const { type } = require('os')
 
 const globalFlags = new Set(['v', 'verbose', 'p', 'print', 's', 'server'])
 
