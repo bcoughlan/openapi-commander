@@ -8,7 +8,7 @@ For anyone who hates navigating REST APIs with curl.
 
 - Generate clean code from your spec.
 - Supports Swagger 2, OpenAPI 3.0 and 3.1.
-- Show examples of request bodies, using examples from the spec or generated wit [openapi-sampler](https://github.com/Redocly/openapi-sampler).
+- Show examples of request bodies, using examples from the spec or generated with [openapi-sampler](https://github.com/Redocly/openapi-sampler).
 - Verbose mode to see response headers.
 - Print a curl command of the request.
 
