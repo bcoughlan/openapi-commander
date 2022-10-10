@@ -161,10 +161,11 @@ function Generator(specLocation, cmdName) {
       write(`    if (${ref} !== undefined && ${ref} !== null) headers['${key}'] = ${ref}\n`)
     }
 
-    write(`    const pathParams = {}\n`)
+    write(`    const pathParams = {\n`)
     for (const {key, ref} of codeRefs['path']) {
-      write(`    pathParams['${key}'] = ${ref}\n`)
+      write(`      '${key}': ${ref},\n`)
     }
+    write(`    }\n`)
 
     write(`    const queryParams = []\n`)
     for (const {key, ref, definition} of codeRefs['query']) {
@@ -176,13 +177,14 @@ function Generator(specLocation, cmdName) {
     }
 
     write(
-      `    await request('${sanitizeString(method)}', defaultServer, '${sanitizeString(path)}', {pathParams, queryParams, headers`,
+      `    await request('${sanitizeString(method)}', defaultServer, '${sanitizeString(path)}', {\n`,
+      `      pathParams, queryParams, headers`
     )
 
     if (codeRefs.body) {
       write(
-        `,\n      body: await fs.readFile(${codeRefs.body}, 'utf-8'),\n`,
-        `      contentType: ${codeRefs.contentType} || '${sanitizeString(defaultContentType)}'\n`,
+        `,\n      body: !${codeRefs.body} ? undefined : await fs.readFile(${codeRefs.body}, 'utf-8'),\n`,
+        `      contentType: !${codeRefs.body} ? undefined : (${codeRefs.contentType} || '${sanitizeString(defaultContentType)}')\n`,
         `    })\n\n`,
       )
     } else {
