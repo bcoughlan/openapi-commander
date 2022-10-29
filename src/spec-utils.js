@@ -68,7 +68,7 @@ function getExamples(operation) {
   return sampler
 }
 
-const validMethods = ['get', 'post', 'put', 'patch', 'delete']
+const validMethods = ['get', 'post', 'put', 'patch', 'delete', 'options', 'head', 'trace']
 function groupEndpointsByFirstTag(api) {
   const endpointsByTag = {}
   for (const [path, methods] of Object.entries(api.paths)) {
