@@ -1,10 +1,8 @@
-const { camelCase } = require('lodash')
-
 
 /*
  * Sanitize a variable for use in a single-quote Javascript string
  */
-function sanitizeString(str) {
+export function sanitizeString(str : string | number | undefined | null | false) : string {
   if (typeof str === 'number') return str.toString()
   if (!str) return ''
   return str.replace(/\\/, '\\\\').replace(/'/g, "\\'").replace(/\r\n/g, "\\n").replace(/\n/g, "\\n")
@@ -13,26 +11,19 @@ function sanitizeString(str) {
 /*
  * Sanitize a string for use in a Javascript comment
  */
-function sanitizeComment(str) {
+export function sanitizeComment(str : string ) : string {
   return keepChars(str, ['space', 'newline', 'quote', 'symbol', 'letter', 'number'])
-}
-
-/*
- * Sanitize a commander.js command name
- */
-function sanitizeCommand(str) {
-  return keepChars(camelCase(str), ['letter', 'number'])
 }
 
 /*
  * Sanitize a String for use as a Javascript variable name
  */
-function sanitizeVariable(str) {
-  const name = keepChars(camelCase(str), ['letter', 'number'])
+export function sanitizeVariable(str : string ) : string {
+  const name = keepChars(str, ['letter', 'number'])
   return (classify(name[0]) === 'letter') ? name : 'var' + name
 }
 
-function classify(c) {
+function classify(c : string) {
   if (c === ' ') return 'space'
   if (c === '\n') return 'newline'
   if (c === "'" || c === '"') return 'quote'
@@ -44,12 +35,10 @@ function classify(c) {
   return 'other'
 }
 
-function filterChars(str, keepPredicate) {
+function filterChars(str : string, keepPredicate : (s : string) => boolean) : string {
   return str.split('').filter(keepPredicate).join('')
 }
 
-function keepChars(str, classes) {
+function keepChars(str : string, classes : string[]) {
   return filterChars(str, c => classes.includes(classify(c)))
 }
-
-module.exports = { sanitizeCommand, sanitizeComment, sanitizeString, sanitizeVariable }

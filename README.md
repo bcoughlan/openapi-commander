@@ -1,8 +1,33 @@
 # OpenAPI Commander
 
-Generate a Node.js command line tool from an OpenAPI definition using the [commander](https://www.npmjs.com/package/commander) library.
+<!-- generated with "markdown-toc -i README.md" -->
+<!-- toc -->
 
-For anyone who hates navigating REST APIs with curl.
+- [Overview](#overview)
+- [Features](#features)
+- [Setup](#setup)
+- [Examples](#examples)
+  * [Commands grouped by tag](#commands-grouped-by-tag)
+  * [Basic GET example](#basic-get-example)
+  * [Global options](#global-options)
+    + [Custom server](#custom-server)
+    + [Set Authorization header](#set-authorization-header)
+    + [Print request without sending](#print-request-without-sending)
+    + [Print a curl command of the request](#print-a-curl-command-of-the-request)
+  * [Print example request bodies](#print-example-request-bodies)
+- [Build standalone binaries](#build-standalone-binaries)
+- [A very incomplete TODO list...](#a-very-incomplete-todo-list)
+- [Contributing](#contributing)
+
+<!-- tocstop -->
+
+# Overview
+
+Generate a Node.js command line tool from an OpenAPI definition using the
+[commander](https://www.npmjs.com/package/commander) library.
+
+It can be used as a starter for writing command line tools that talk to APIs,
+or as an alternative to using curl to work with APIs.
 
 # Features
 
@@ -42,7 +67,10 @@ node petstore.js ...
 ```
 # Examples
 
-## Commands grouped by tag
+## Subcommands
+
+The commands are grouped by their first tag in the OpenAPI spec (the same logic
+that Swagger UI uses). Operations
 
 ```
 ~/petstore$ node petstore.js
@@ -172,9 +200,11 @@ Example for application/json:
 
 # Build standalone binaries
 
-To build standalone binaries for each platform I recommend [vercel/pkg](https://github.com/vercel/pkg).
+To build multi-platform standalone binaries platform I recommend [vercel/pkg](https://github.com/vercel/pkg).
 
 # A very incomplete TODO list...
+
+The top priority is to beef up the test suite.
 
 - Syntax highlighting of examples
 - Implement different security/auth types.
@@ -189,6 +219,7 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
 
 # Contributing
 
-This is a hobby side project so I have limited time to work on issues but I will do my best to discuss issues, review PRs
-and keep the project maintained. Please open an issue for discussion before opening any significant PRs to avoid any disappointment
-about project scope.
+This is a hobby side project so I have limited time to work on issues but I will 
+do my best to discuss issues, review PRs and keep the project maintained. Please
+open an issue for discussion before opening any significant PRs to avoid any
+disappointment about project scope.

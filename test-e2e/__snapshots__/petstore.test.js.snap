@@ -67,19 +67,19 @@ exports[`Petstore lists commands 1`] = `
 Everything about your Pets
 
 Options:
-  -h, --help                           display help for command
+  -h, --help                            display help for command
 
 Commands:
-  updatePet [options] <body>           Update an existing pet
-  addPet [options] <body>              Add a new pet to the store
-  findPetsByStatus [options]           Finds Pets by status
-  findPetsByTags [options]             *DEPRECATED* Finds Pets by tags
-  getPetById <petId>                   Find pet by ID
-  updatePetWithForm [options] <petId>  Updates a pet in the store with form
-                                       data
-  deletePet [options] <petId>          Deletes a pet
-  uploadFile [options] <petId>         uploads an image
-  help [command]                       display help for command
+  updatePet [options] <body>            Update an existing pet
+  addPet [options] <body>               Add a new pet to the store
+  findPetsByStatus [options]            Finds Pets by status
+  findPetsByTags [options]              *DEPRECATED* Finds Pets by tags
+  getPetById <pet-id>                   Find pet by ID
+  updatePetWithForm [options] <pet-id>  Updates a pet in the store with form
+                                        data
+  deletePet [options] <pet-id>          Deletes a pet
+  uploadFile [options] <pet-id>         uploads an image
+  help [command]                        display help for command
 ",
 }
 `;
@@ -92,14 +92,13 @@ exports[`Petstore prints --help on a PUT 1`] = `
 Update an existing pet by Id
 
 Arguments:
-  body                    Path to a file containing the request body.
+  body                   Path to a file containing the request body.
 
 Options:
-  --body-type <bodyType>  Content type of the request body. (choices:
-                          "application/json", "application/xml",
-                          "application/x-www-form-urlencoded", default:
-                          "application/json")
-  -h, --help              display help for command
+  --content-type <type>  Content type of the request body. (choices:
+                         "application/json", "application/xml",
+                         "application/x-www-form-urlencoded")
+  -h, --help             display help for command
 
 Commands:
   examples
@@ -118,7 +117,7 @@ exports[`Petstore prints a curl GET request 1`] = `
 exports[`Petstore prints a curl POST request 1`] = `
 {
   "stderr": "",
-  "stdout": "curl -X POST -H 'Authorization: Bearer mytoken' -H 'Accept: */*' -H 'Content-Type: application/json' 'http://localhost:3123/pet' -d '{"id":1,"name":"doggie"}'
+  "stdout": "curl -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer mytoken' -H 'Accept: */*' 'http://localhost:3123/pet' -d '{"id":1,"name":"doggie"}'
 ",
 }
 `;
@@ -127,24 +126,23 @@ exports[`Petstore prints examples 1`] = `
 {
   "stderr": "",
   "stdout": "Example for application/json:
-{ language: 'json' }
-Example for application/xml:
 {
-  id: 10,
-  name: 'doggie',
-  category: { id: 1, name: 'Dogs' },
-  photoUrls: [ 'string' ],
-  tags: [ { id: 0, name: 'string' } ],
-  status: 'available'
-}
-Example for application/x-www-form-urlencoded:
-{
-  id: 10,
-  name: 'doggie',
-  category: { id: 1, name: 'Dogs' },
-  photoUrls: [ 'string' ],
-  tags: [ { id: 0, name: 'string' } ],
-  status: 'available'
+  "id": 10,
+  "name": "doggie",
+  "category": {
+    "id": 1,
+    "name": "Dogs"
+  },
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 0,
+      "name": "string"
+    }
+  ],
+  "status": "available"
 }
 ",
 }
