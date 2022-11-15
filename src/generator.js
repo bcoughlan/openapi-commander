@@ -60,8 +60,12 @@ function Generator(specLocation, cmdName) {
       const cmdVar = rootUniqueVars.var(tag.name)
       generateTagCommand(cmdVar, tag.description)
 
-      for (const { parameters, path, method, operation } of endpointsByTag[tag.name]) {
+      for (let { parameters, path, method, operation } of endpointsByTag[tag.name]) {
         try {
+          //OpenAPI spec: If in is "header" and the name field is "Accept", "Content-Type" or "Authorization",
+          //              it shall be ignored.
+          parameters = parameters.filter(p =>!(p.in === 'header' && ['accept', 'content-type', 'authorization'].includes(p.name?.toLowerCase())))
+
           if (!operation.operationId) {
             operation.operationId = _.camelCase(`${method.toLowerCase()}_${path.replace(/\//g, '_')}`)
           }
