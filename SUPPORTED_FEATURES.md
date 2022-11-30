@@ -28,6 +28,7 @@ Assessment of missing OAS features...
 |  | cookie - explode | No |
 | Cookie paramaters | | Somewhat supported but can't think of a practical use case. |
 | JSON schema | const | Won't support unless someone has a use case. |
+|    | readonly | No |
 
 
 
