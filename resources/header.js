@@ -33,6 +33,7 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
   const globalOpts = getGlobalOptions()
   const baseUrl = globalOpts.server ?? defaultServer
   if (globalOpts.auth) headers.Authorization = globalOpts.auth
+  headers.Accept = globalOpts.accept ?? '*/*'
 
   try {
     var fullUrl = new URL(baseUrl)
@@ -52,7 +53,6 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
   }).join('/').slice(1)
 
   if (body) headers['Content-Type'] = contentType
-  headers['Accept'] = '*/*'
 
   if (globalOpts.print === 'curl') {
     const shellEscape = function (str) {
@@ -113,6 +113,7 @@ function getGlobalOptions() {
   const opts = program.opts()
   opts.server = opts.server ?? process.env[`${COMMAND_NAME_ENV_VARS}_SERVER`]
   opts.auth = opts.auth ?? process.env[`${COMMAND_NAME_ENV_VARS}_AUTH`]
+  opts.accept = opts.accepts ?? process.env[`${COMMAND_NAME_ENV_VARS}_ACCEPT`]
   return opts
 }
 
@@ -121,3 +122,4 @@ program.addOption(new Option('-p, --print <mode>', 'Print the HTTP request inste
 program.option('-v, --verbose', 'Includes the response headers in the output')
 program.option('-s, --server <server>', 'Base URL to use for requests')
 program.option('-a, --auth <auth>', 'Authorization header to send')
+program.option('-c, --accept <accept>', 'Accept header to send')
