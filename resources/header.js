@@ -113,7 +113,7 @@ function getGlobalOptions() {
   const opts = program.opts()
   opts.server = opts.server ?? process.env[`${COMMAND_NAME_ENV_VARS}_SERVER`]
   opts.auth = opts.auth ?? process.env[`${COMMAND_NAME_ENV_VARS}_AUTH`]
-  opts.accept = opts.accepts ?? process.env[`${COMMAND_NAME_ENV_VARS}_ACCEPT`]
+  opts.accept = opts.accept ?? process.env[`${COMMAND_NAME_ENV_VARS}_ACCEPT`]
   return opts
 }
 
