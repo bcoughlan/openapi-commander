@@ -6,7 +6,7 @@ const { trimDescription } = require('./utils')
 const _ = require('lodash')
 const { parseSpec } = require('./parse')
 
-const globalFlags = new Set(['v', 'verbose', 'p', 'print', 's', 'server'])
+const globalFlags = new Set(['v', 'verbose', 'p', 'print', 's', 'server', 'c', 'accept'])
 
 const reservedKeywords = [
   "break",  "case",  "catch",  "class",  "const",  "continue",  "debugger",  "default",  "delete",  "do",  "else", 
