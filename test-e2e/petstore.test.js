@@ -21,6 +21,9 @@ describe('Petstore', () => {
     app.get('/pet/2', (req, res) => {
       res.json({ auth: req.headers['authorization'] })
     })
+    app.get('/pet/3', (req, res) => {
+      res.status(400).json({ message: 'bad request' })
+    })
     app.get('/customserver/pet/1', (req, res) => {
       res.json({ msg: 'custom server worked' })
     })
@@ -74,6 +77,11 @@ describe('Petstore', () => {
   it('can do a PUT', async () => {
     await fs.writeFile('/tmp/pet.json', '{"id":10, "name":"test", "status":"available"}')
     expect(await generatorTest.run('pet updatePet /tmp/pet.json')).toMatchSnapshot()
+  })
+
+  it('sets exit code 1 if there is a non-2xx response', async () => {
+    const { code } = await generatorTest.run('pet getPetById 3')
+    expect(code).toEqual(1)
   })
 
   describe('auth header', () => {

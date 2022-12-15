@@ -82,6 +82,10 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
     const response = await httpRequest(fullUrl.toString(), { method, body, headers })
     console.error("Status:", response.status) //stderr so body can be piped
 
+    if (!response.status || response.status < 200 || response.status >= 400) {
+      process.exitCode = 1
+    }
+
     if (globalOpts.verbose) {
       for (const [key, value] of Object.entries(response.headers)) {
         console.log(`${key}: ${value}`)
