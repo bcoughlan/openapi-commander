@@ -176,7 +176,7 @@ To build standalone binaries for each platform I recommend [vercel/pkg](https://
 
 # A very incomplete TODO list...
 
-- Fix GitHub actions build
+- Syntax highlighting of examples
 - Implement different security/auth types.
 - Auto-detect request body type from file.
 - Show JSON & YAML examples with comments for field descriptions.

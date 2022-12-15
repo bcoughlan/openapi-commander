@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Petstore Swagger 2 debug prints 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "GET http://petstore.swagger.io/v1/pets
 Accept: */*
@@ -10,17 +10,18 @@ Accept: */*
 `;
 
 exports[`Petstore Swagger 2 lists categories 1`] = `
-Object {
+{
   "code": 1,
   "stderr": "",
   "stdout": "Usage: petstore-swagger [options] [command]
 
 Options:
   -p, --print <mode>     Print the HTTP request instead of sending it.
-                         (choices: \\"curl\\", \\"plain\\")
+                         (choices: "curl", "plain")
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
+  -c, --accept <accept>  Accept header to send
   -h, --help             display help for command
 
 Commands:
@@ -31,7 +32,7 @@ Commands:
 `;
 
 exports[`Petstore Swagger 2 lists commands 1`] = `
-Object {
+{
   "code": 1,
   "stderr": "",
   "stdout": "Usage: petstore-swagger pets [options] [command]

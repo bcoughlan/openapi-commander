@@ -1,32 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Petstore can do a GET 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "Status: 200
 {
-  \\"id\\": 1,
-  \\"name\\": \\"doggie\\"
+  "id": 1,
+  "name": "doggie"
 }
 ",
 }
 `;
 
 exports[`Petstore can do a PUT 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "Status: 200
 {
-  \\"id\\": 10,
-  \\"name\\": \\"test\\",
-  \\"status\\": \\"available\\"
+  "id": 10,
+  "name": "test",
+  "status": "available"
 }
 ",
 }
 `;
 
 exports[`Petstore debug prints 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "GET http://localhost:3123/pet/10
 Accept: */*
@@ -35,17 +35,18 @@ Accept: */*
 `;
 
 exports[`Petstore lists categories 1`] = `
-Object {
+{
   "code": 1,
   "stderr": "",
   "stdout": "Usage: petstore [options] [command]
 
 Options:
   -p, --print <mode>     Print the HTTP request instead of sending it.
-                         (choices: \\"curl\\", \\"plain\\")
+                         (choices: "curl", "plain")
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
+  -c, --accept <accept>  Accept header to send
   -h, --help             display help for command
 
 Commands:
@@ -58,7 +59,7 @@ Commands:
 `;
 
 exports[`Petstore lists commands 1`] = `
-Object {
+{
   "code": 1,
   "stderr": "",
   "stdout": "Usage: petstore pet [options] [command]
@@ -84,7 +85,7 @@ Commands:
 `;
 
 exports[`Petstore prints --help on a PUT 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "Usage: petstore pet updatePet [options] [command] <body>
 
@@ -95,9 +96,9 @@ Arguments:
 
 Options:
   --body-type <bodyType>  Content type of the request body. (choices:
-                          \\"application/json\\", \\"application/xml\\",
-                          \\"application/x-www-form-urlencoded\\", default:
-                          \\"application/json\\")
+                          "application/json", "application/xml",
+                          "application/x-www-form-urlencoded", default:
+                          "application/json")
   -h, --help              display help for command
 
 Commands:
@@ -107,7 +108,7 @@ Commands:
 `;
 
 exports[`Petstore prints a curl GET request 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "curl -X GET -H 'Accept: */*' 'http://localhost:3123/pet/10'
 ",
@@ -115,35 +116,18 @@ Object {
 `;
 
 exports[`Petstore prints a curl POST request 1`] = `
-Object {
+{
   "stderr": "",
-  "stdout": "curl -X POST -H 'Authorization: Bearer mytoken' -H 'Content-Type: application/json' -H 'Accept: */*' 'http://localhost:3123/pet' -d '{\\"id\\":1,\\"name\\":\\"doggie\\"}'
+  "stdout": "curl -X POST -H 'Authorization: Bearer mytoken' -H 'Accept: */*' -H 'Content-Type: application/json' 'http://localhost:3123/pet' -d '{"id":1,"name":"doggie"}'
 ",
 }
 `;
 
 exports[`Petstore prints examples 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "Example for application/json:
-{
-  [36m\\"id\\"[39m: [32m10[39m,
-  [36m\\"name\\"[39m: [31m\\"doggie\\"[39m,
-  [36m\\"category\\"[39m: {
-    [36m\\"id\\"[39m: [32m1[39m,
-    [36m\\"name\\"[39m: [31m\\"Dogs\\"[39m
-  },
-  [36m\\"photoUrls\\"[39m: [
-    [31m\\"string\\"[39m
-  ],
-  [36m\\"tags\\"[39m: [
-    {
-      [36m\\"id\\"[39m: [32m0[39m,
-      [36m\\"name\\"[39m: [31m\\"string\\"[39m
-    }
-  ],
-  [36m\\"status\\"[39m: [31m\\"available\\"[39m
-}
+{ language: 'json' }
 Example for application/xml:
 {
   id: 10,

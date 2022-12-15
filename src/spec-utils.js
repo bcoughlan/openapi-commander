@@ -1,5 +1,4 @@
 const OpenAPISampler = require('openapi-sampler')
-const { highlight } = require('cli-highlight')
 const jsYaml = require('js-yaml')
 
 //Tags don't have to be defined on the root level, but if they are we want to display the
@@ -14,28 +13,14 @@ function getTags(api, endpointsByTag) {
   return tags
 }
 
-/**
- * Syntax highlighting regardless of terminal settings.
- * TODO: This FORCE_COLOR override trick does not work.
- */
-function alwaysHighlight(str, opts) {
-  //chalk library disables color if it's piped or not a TTY stream
-  const old = process.env['FORCE_COLOR']
-  process.env['FORCE_COLOR'] = '2'
-  const ret = highlight(str, opts)
-  process.env['FORCE_COLOR'] = old
-  return ret
-}
-
-
 function getExamples(operation) {
   function renderExample(example, contentType) {
     if (typeof ex === 'string') {
       return example
     } else if (contentType === 'application/json') {
-      return alwaysHighlight(JSON.stringify(example, null, 2), { language: 'json' })
+      return JSON.stringify(example, null, 2), { language: 'json' }
     } else if (contentType === 'application/yaml') {
-      return alwaysHighlight(jsYaml.dump(example), { language: 'yaml' })
+      return jsYaml.dump(example), { language: 'yaml' }
     }
     //TODO application/xml
     //TODO application/x-www-form-urlencoded
