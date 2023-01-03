@@ -30,7 +30,28 @@ function httpRequest(url, { method, body, headers }) {
   })
 }
 
-async function request(method, defaultServer, path, { pathParams, queryParams, headers, body, contentType }) {
+function removeNullish(obj) {
+  var propNames = Object.getOwnPropertyNames(obj);
+  for (var i = 0; i < propNames.length; i++) {
+    var propName = propNames[i];
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName];
+    }
+  }
+}
+
+function emptyRequestParams() {
+  return {
+    pathParams: {},
+    queryParams: [],
+    headers: {},
+    body: undefined
+  }
+}
+
+async function request(method, defaultServer, path, { pathParams, queryParams, headers, body }) {
+  removeNullish(headers)
+
   const globalOpts = getGlobalOptions()
   const baseUrl = globalOpts.server ?? defaultServer
   if (globalOpts.auth) headers.Authorization = globalOpts.auth
@@ -52,8 +73,6 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
     }
     return part
   }).join('/').slice(1)
-
-  if (body) headers['Content-Type'] = contentType
 
   if (globalOpts.print === 'curl') {
     const shellEscape = function (str) {

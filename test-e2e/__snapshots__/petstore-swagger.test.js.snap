@@ -38,13 +38,13 @@ exports[`Petstore Swagger 2 lists commands 1`] = `
   "stdout": "Usage: petstore-swagger pets [options] [command]
 
 Options:
-  -h, --help           display help for command
+  -h, --help            display help for command
 
 Commands:
-  listPets [options]   List all pets
-  createPets           Create a pet
-  showPetById <petId>  Info for a specific pet
-  help [command]       display help for command
+  listPets [options]    List all pets
+  createPets            Create a pet
+  showPetById <pet-id>  Info for a specific pet
+  help [command]        display help for command
 ",
 }
 `;

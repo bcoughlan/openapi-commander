@@ -1,4 +1,4 @@
-const { sanitizeString, sanitizeComment, sanitizeVariable, sanitizeCommand } = require('./sanitize')
+import { sanitizeString, sanitizeComment, sanitizeVariable } from './sanitize'
 
 describe('sanitize', () => {
 
@@ -15,7 +15,4 @@ describe('sanitize', () => {
     expect(sanitizeVariable("1blah blah 1 !@£$%^&*(JaJa 😍")).toBe("var1BlahBlah1JaJa")
   })
 
-  it('should sanitize commander commands', () => {
-    expect(sanitizeCommand("I'm a commander_comma1nd!")).toBe("imACommanderComma1Nd")
-  })
 })
