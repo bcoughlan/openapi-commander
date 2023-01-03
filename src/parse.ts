@@ -19,11 +19,11 @@ export async function parseSpec(specLocation : string) : Promise<OAS31Flat.Docum
   
 }
 
-async function convertSwaggerToOpenAPI(swagger : any) {
+async function convertSwaggerToOpenAPI(swagger : object) {
   const converter = await import('swagger2openapi')
   const options = { patch: true, warnOnly: true }
   return new Promise((resolve, reject) => {
-    converter.convertObj(swagger, options, (err: any, options: { openapi: unknown }) => {
+    converter.convertObj(swagger, options, (err: Error, options: { openapi: unknown }) => {
       if (err) {
         reject(err)
       } else {

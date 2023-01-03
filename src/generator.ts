@@ -56,9 +56,9 @@ export function Generator(specLocation : string, cmdName : string) {
       generatePositionalArguments(command.arguments)
       generateOptionArguments(command.arguments)
       generateAction(command.arguments, command.api)
-    } catch (err: any) {
+    } catch (err) {
       //Add context for errors
-      if ('message' in err)
+      if (err instanceof Error)
         err.message = `Error processing command ${command.name} ${err.message}`
       throw err
     }

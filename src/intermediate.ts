@@ -10,8 +10,6 @@ import camelCase from "lodash/camelCase";
 import { CLI } from './intermediate-model'
 import { OAS31Flat } from "./oas31-types"
 import { trimDescription, UniqueNameGenerator } from "./utils";
-import { type } from "os";
-
 
 const GLOBAL_FLAGS = ['v', 'verbose', 'p', 'print', 's', 'server', 'c', 'accept']
 const FORBIDDEN_HEADERS = ['accept', 'content-type', 'authorization']

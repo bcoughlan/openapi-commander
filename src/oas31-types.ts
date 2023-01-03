@@ -6,6 +6,8 @@
  * - Introduce a version without 'ReferenceObject' to make it easier to work with dereffed specs.
  */
 
+/* eslint-disabletypescript-eslint/no-explicit-any */
+
 export namespace OAS31 {
 
   export interface Document {
