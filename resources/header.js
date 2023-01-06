@@ -12,6 +12,7 @@ const COMMAND_NAME = 'COMMAND_NAME_TO_BE_REPLACED'
 const COMMAND_NAME_ENV_VARS = 'COMMAND_NAME_ENV_VARS_TO_BE_REPLACED'
 
 const program = new Command(COMMAND_NAME)
+program.allowExcessArguments(false)
 
 function httpRequest(url, { method, body, headers }) {
   return new Promise((resolve, reject) => {
