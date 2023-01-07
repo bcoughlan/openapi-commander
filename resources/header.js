@@ -31,7 +31,7 @@ function httpRequest(url, { method, body, headers }) {
   })
 }
 
-function removeNullish(obj) {
+function removeNullAndUndefined(obj) {
   var propNames = Object.getOwnPropertyNames(obj);
   for (var i = 0; i < propNames.length; i++) {
     var propName = propNames[i];
@@ -51,12 +51,24 @@ function emptyRequestParams() {
 }
 
 async function request(method, defaultServer, path, { pathParams, queryParams, headers, body }) {
-  removeNullish(headers)
+  removeNullAndUndefined(headers)
+  headers.Accept = '*/*'
 
   const globalOpts = getGlobalOptions()
+  if (globalOpts.header) {
+    const headerLookup = Object.fromEntries(Object.keys(headers).map(h => [h.toLowerCase(), h]))
+    for (const globalHeader of globalOpts.header) {
+      const [key, value] = globalHeader.split(':', 2)
+      if (!value) {
+        console.error('Invalid header. It should be in the format "key: value":', globalHeader)
+      }
+      const mappedKey = headerLookup[key.toLowerCase()] ?? key
+      headers[mappedKey] = value.trimStart()
+    }
+  }
+
   const baseUrl = globalOpts.server ?? defaultServer
   if (globalOpts.auth) headers.Authorization = globalOpts.auth
-  headers.Accept = globalOpts.accept ?? '*/*'
 
   try {
     var fullUrl = new URL(baseUrl)
@@ -138,7 +150,6 @@ function getGlobalOptions() {
   const opts = program.opts()
   opts.server = opts.server ?? process.env[`${COMMAND_NAME_ENV_VARS}_SERVER`]
   opts.auth = opts.auth ?? process.env[`${COMMAND_NAME_ENV_VARS}_AUTH`]
-  opts.accept = opts.accept ?? process.env[`${COMMAND_NAME_ENV_VARS}_ACCEPT`]
   return opts
 }
 
@@ -147,4 +158,5 @@ program.addOption(new Option('-p, --print <mode>', 'Print the HTTP request inste
 program.option('-v, --verbose', 'Includes the response headers in the output')
 program.option('-s, --server <server>', 'Base URL to use for requests')
 program.option('-a, --auth <auth>', 'Authorization header to send')
-program.option('-c, --accept <accept>', 'Accept header to send')
+program.option('-h, --header <header>', 'Set HTTP Header in the format "key: value". ' +
+  'Headers set with this option take precedence over any other headers', (p,v) => (p ?? []).concat([v]))

@@ -46,8 +46,10 @@ Options:
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
-  -c, --accept <accept>  Accept header to send
-  -h, --help             display help for command
+  -h, --header <header>  Set HTTP Header in the format "key: value". Headers
+                         set with this option take precedence over any other
+                         headers
+  --help                 display help for command
 
 Commands:
   pet                    Everything about your Pets
@@ -117,7 +119,7 @@ exports[`Petstore prints a curl GET request 1`] = `
 exports[`Petstore prints a curl POST request 1`] = `
 {
   "stderr": "",
-  "stdout": "curl -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer mytoken' -H 'Accept: */*' 'http://localhost:3123/pet' -d '{"id":1,"name":"doggie"}'
+  "stdout": "curl -X POST -H 'Content-Type: application/json' -H 'Accept: */*' -H 'Authorization: Bearer mytoken' 'http://localhost:3123/pet' -d '{"id":1,"name":"doggie"}'
 ",
 }
 `;

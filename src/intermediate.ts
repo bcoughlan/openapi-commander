@@ -11,7 +11,7 @@ import { CLI } from './intermediate-model'
 import { OAS31Flat } from "./oas31-types"
 import { trimDescription, UniqueNameGenerator } from "./utils";
 
-const GLOBAL_FLAGS = ['v', 'verbose', 'p', 'print', 's', 'server', 'c', 'accept']
+const GLOBAL_FLAGS = ['v', 'verbose', 'p', 'print', 's', 'server', 'h', 'header']
 const FORBIDDEN_HEADERS = ['accept', 'content-type', 'authorization']
 
 export function convertToIntermediate(spec: OAS31Flat.Document, cmdName: string): CLI.Program {

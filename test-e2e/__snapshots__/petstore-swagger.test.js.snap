@@ -21,8 +21,10 @@ Options:
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
-  -c, --accept <accept>  Accept header to send
-  -h, --help             display help for command
+  -h, --header <header>  Set HTTP Header in the format "key: value". Headers
+                         set with this option take precedence over any other
+                         headers
+  --help                 display help for command
 
 Commands:
   pets
