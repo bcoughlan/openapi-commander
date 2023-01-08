@@ -20,7 +20,8 @@
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "resources"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
