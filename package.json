@@ -1,6 +1,6 @@
 {
   "name": "openapi-commander",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Generate a commander.js CLI tool from an OpenAPI definition.",
   "exports": "src/index.js",
   "engines": {
