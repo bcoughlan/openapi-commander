@@ -57,10 +57,13 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
   const globalOpts = getGlobalOptions()
   if (globalOpts.header) {
     const headerLookup = Object.fromEntries(Object.keys(headers).map(h => [h.toLowerCase(), h]))
+
     for (const globalHeader of globalOpts.header) {
       const [key, value] = globalHeader.split(':', 2)
       if (!value) {
         console.error('Invalid header. It should be in the format "key: value":', globalHeader)
+        process.exitCode = 1
+        return
       }
       const mappedKey = headerLookup[key.toLowerCase()] ?? key
       headers[mappedKey] = value.trimStart()
@@ -159,4 +162,4 @@ program.option('-v, --verbose', 'Includes the response headers in the output')
 program.option('-s, --server <server>', 'Base URL to use for requests')
 program.option('-a, --auth <auth>', 'Authorization header to send')
 program.option('-h, --header <header>', 'Set HTTP Header in the format "key: value". ' +
-  'Headers set with this option take precedence over any other headers', (p,v) => (p ?? []).concat([v]))
+  'Headers set with this option take precedence over any other headers', (p,v) => (v ?? []).concat([p]))
