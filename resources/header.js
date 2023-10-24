@@ -85,7 +85,7 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
   if (!fullUrl.pathname.endsWith('/')) fullUrl.pathname += '/'
   fullUrl.pathname += path.split('/').map(part => {
     if (part.startsWith('{') && part.endsWith('}')) {
-      return pathParams[part.substring(1, part.length - 1)]
+      return encodeURIComponent(pathParams[part.substring(1, part.length - 1)])
     }
     return part
   }).join('/').slice(1)
@@ -115,7 +115,7 @@ async function request(method, defaultServer, path, { pathParams, queryParams, h
   } else {
     // eslint-disable-next-line no-undef
     const response = await httpRequest(fullUrl.toString(), { method, body, headers })
-    console.error("Status:", response.status) //stderr so body can be piped
+    console.error(`Status: ${response.status}`) //stderr so body can be piped
 
     if (!response.status || response.status < 200 || response.status >= 400) {
       process.exitCode = 1
