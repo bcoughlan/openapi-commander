@@ -1,4 +1,4 @@
-import { camelCase } from "lodash"
+import { camelCase } from "lodash-es"
 
 export function trimDescription(str : string | undefined) : string | undefined {
   if (!str) return undefined

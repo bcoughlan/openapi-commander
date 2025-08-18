@@ -4,17 +4,16 @@
  * artifacts such as autocomplete files and documentation without duplicating logic.
  */
 
-import { getExamples } from "./spec-utils";
-import kebabCase from "lodash/kebabCase";
-import camelCase from "lodash/camelCase";
-import { CLI } from './intermediate-model'
-import { OAS31Flat } from "./oas31-types"
-import { trimDescription, UniqueNameGenerator } from "./utils";
+import { getExamples } from "./spec-utils.ts";
+import { kebabCase, camelCase } from "lodash-es";
+import * as CLI from './intermediate-model.ts'
+import * as OAS31 from "./oas31-types.ts"
+import { trimDescription, UniqueNameGenerator } from "./utils.ts";
 
 const GLOBAL_FLAGS = ['v', 'verbose', 'p', 'print', 's', 'server', 'h', 'header']
 const FORBIDDEN_HEADERS = ['accept', 'content-type', 'authorization']
 
-export function convertToIntermediate(spec: OAS31Flat.Document, cmdName: string): CLI.Program {
+export function convertToIntermediate(spec: OAS31.Document, cmdName: string): CLI.Program {
   const grouped = groupEndpointsByFirstTag(spec)
   const tags = getOrderedTags(spec, grouped)
 
@@ -33,7 +32,7 @@ export function convertToIntermediate(spec: OAS31Flat.Document, cmdName: string)
   for (const tag of tags) {
     const group: CLI.CommandGroup = {
       type: 'group',
-      name: tag.name,
+    name: tag.name,
       summary: trimDescription(tag.description),
       description: tag.description,
       subcommands: (grouped[tag.name] ?? []).map(createCommand)
@@ -162,9 +161,9 @@ function getArguments(endpoint: Endpoint) : CLI.Argument[] {
 type Endpoint = {
   path: string,
   method: string,
-  operation: OAS31Flat.OperationObject,
+  operation: OAS31.OperationObject,
   /** Path-level paramaeters and operation paramaters */
-  allParameters: OAS31Flat.ParameterObject[]
+  allParameters: OAS31.ParameterObject[]
 }
 type GroupedEndpoints = {[tag: string]: Endpoint[]}
 

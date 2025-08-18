@@ -4,8 +4,9 @@
   "description": "Generate a commander.js CLI tool from an OpenAPI definition.",
   "exports": "src/index.js",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=24.0.0"
   },
+  "type": "module",
   "keywords": [
     "openapi",
     "openapi3",
@@ -38,7 +39,7 @@
   "dependencies": {
     "@apidevtools/swagger-parser": "^12.0.0",
     "commander": "^14.0.0",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "openapi-sampler": "^1.6.1",
     "swagger2openapi": "^7.0.8"
   },
@@ -56,12 +57,11 @@
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.40.0",
     "babel-jest": "^30.0.5",
-    "eslint": "^9.33.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-jest": "^29.0.1",
     "express": "^5.1.0",
     "jest": "^30.0.5",
     "tmp-promise": "^3.0.3",
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
 }

@@ -1,4 +1,4 @@
-import { sanitizeString, sanitizeComment, sanitizeVariable } from './sanitize'
+import { sanitizeString, sanitizeComment, sanitizeVariable } from './sanitize.ts'
 
 describe('sanitize', () => {
 

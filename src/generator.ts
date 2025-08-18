@@ -1,12 +1,12 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import _ from 'lodash'
-import { CLI } from './intermediate-model'
-import { convertToIntermediate, } from './intermediate'
-import { parseSpec } from './parse'
-import { UniqueVarGenerator } from './utils'
-import { sanitizeComment, sanitizeString, sanitizeVariable } from './sanitize'
-import { OAS31Flat } from './oas31-types'
+import { snakeCase, camelCase } from 'lodash-es'
+import * as CLI from './intermediate-model.ts'
+import { convertToIntermediate, } from './intermediate.ts'
+import { parseSpec } from './parse.ts'
+import { UniqueVarGenerator } from './utils.ts'
+import { sanitizeComment, sanitizeString, sanitizeVariable } from './sanitize.ts'
+import * as OAS31 from './oas31-types.ts'
 
 export function Generator(specLocation : string, cmdName : string) {
 
@@ -20,7 +20,7 @@ export function Generator(specLocation : string, cmdName : string) {
 
     write((await fs.readFile(path.join(__dirname, '../resources/header.js'), 'utf8'))
       .replace('COMMAND_NAME_TO_BE_REPLACED', sanitizeString(cmdName))
-      .replace('COMMAND_NAME_ENV_VARS_TO_BE_REPLACED', sanitizeString(_.snakeCase(cmdName).toUpperCase())))
+      .replace('COMMAND_NAME_ENV_VARS_TO_BE_REPLACED', sanitizeString(snakeCase(cmdName).toUpperCase())))
     write(`const defaultServer = '${program.defaultServer ? sanitizeString(program.defaultServer) : ''}'\n\n`)
 
     
@@ -131,7 +131,7 @@ export function Generator(specLocation : string, cmdName : string) {
 
     const refs = getCodeRefs(args)
 
-    function parameters(paramIn : string) : [OAS31Flat.ParameterObject, RefArg][] {
+    function parameters(paramIn : string) : [OAS31.ParameterObject, RefArg][] {
       return refs.filter(e => e.mapping.type === 'parameter' && e.mapping.definition.in === paramIn)
               .map(e => [(e.mapping as CLI.ParameterMapping).definition, e])
     }
@@ -196,7 +196,7 @@ export function Generator(specLocation : string, cmdName : string) {
         refArgs.push({...arg, ref: uniqueVars.get(arg.name)})
       } else {
         //Commander camel-cases option keys
-        refArgs.push({...arg, ref: `options['${sanitizeString(_.camelCase(arg.name))}']`})
+        refArgs.push({...arg, ref: `options['${sanitizeString(camelCase(arg.name))}']`})
       }
     }
 

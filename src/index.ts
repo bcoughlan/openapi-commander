@@ -1,6 +1,6 @@
 
 import fs from 'node:fs/promises'
-import { Generator } from './generator'
+import { Generator } from './generator.ts'
 import path from 'node:path'
 import { Command, Argument } from 'commander'
 
