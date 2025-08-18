@@ -39,10 +39,8 @@ export function Generator(specLocation : string, cmdName : string) {
     }
 
     write(
-      `if (require.main === module) {\n`,
+      `if (isMain()) {\n`,
       `  program.parseAsync(process.argv)\n`,
-      `} else {\n`,
-      `  module.exports = program\n`,
       `}\n`
     )
     return output.join('')

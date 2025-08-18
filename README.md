@@ -26,52 +26,6 @@
 Generate a Node.js command line tool from an OpenAPI definition using the
 [commander](https://www.npmjs.com/package/commander) library.
 
-It can be used as a starter for writing command line tools that talk to APIs,
-or as an alternative to using curl to work with APIs.
-
-# Features
-
-- Generate clean code from your spec.
-- Supports Swagger 2, OpenAPI 3.0 and 3.1.
-- Show examples of request bodies, using examples from the spec or generated with [openapi-sampler](https://github.com/Redocly/openapi-sampler).
-- Verbose mode to see response headers.
-- Print a curl command of the request.
-
-# Setup
-
-1. Create an npm project with `npm init` or use an existing one. Your Node.js version must be 16+
-
-2. Install dependencies
-
-```
-npm install commander@9
-npm install --save-dev openapi-commander
-```
-
-3. Generate the CLI code
-
-```
-npx openapi-commander generate <path or URL to spec> <output file>
-```
-
-e.g.
-
-```
-npx openapi-commander generate https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/examples/v3.0/petstore.yaml petstore.js
-```
-
-4. Run
-
-```
-node petstore.js ...
-```
-# Examples
-
-## Subcommands
-
-The commands are grouped by their first tag in the OpenAPI spec (the same logic
-that Swagger UI uses). Operations
-
 ```
 ~/petstore$ node petstore.js
 
@@ -89,6 +43,55 @@ Commands:
   user                   Operations about user
   help [command]         display help for command
 ```
+
+It can be used as a starter for writing command line tools that talk to APIs,
+or as an alternative to using curl to work with APIs.
+
+# Features
+
+- Generate clean code from your spec.
+- Supports Swagger 2, OpenAPI 3.0 and 3.1.
+- Show examples of request bodies, using examples from the spec or generated with [openapi-sampler](https://github.com/Redocly/openapi-sampler).
+- Verbose mode to see response headers.
+- Print a curl command of the request.
+
+# Setup
+
+1. Create an npm project with `npm init` or use an existing one. Your Node.js version must be 16+
+
+2. Install dependencies
+
+** Note: If your project still uses CommonJS, install `openapi-commander@3` and use `.js` for the output extension.**
+
+```
+npm install commander
+npm install --save-dev openapi-commander
+```
+
+3. Generate the CLI code
+
+```
+npx openapi-commander generate <path or URL to spec> <output file>
+```
+
+e.g.
+
+```
+npx openapi-commander generate https://raw.githubusercontent.com/OAI/OpenAPI-Specification/old-v3.0.4-dev/examples/v3.0/petstore.yaml petstore.mjs
+```
+
+4. Run
+
+```
+node petstore.js ...
+```
+
+# Examples
+
+## Subcommands
+
+The commands are grouped by their first tag in the OpenAPI spec (the same logic
+that Swagger UI uses).
 
 ```
 ~/petstore$ node petstore.js pet

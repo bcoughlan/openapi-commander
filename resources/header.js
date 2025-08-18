@@ -5,18 +5,24 @@
 
 /* eslint-disable no-unused-vars */
 
-const fs = require('fs/promises')
-const { Command, Argument, Option } = require('commander')
+import * as fs from 'node:fs/promises'
+import { Command, Argument, Option } from 'commander'
+import { pathToFileURL } from "url";
+import { realpathSync } from "fs";
+import * as http from 'http'
+import * as https from 'https'
 
 const COMMAND_NAME = 'COMMAND_NAME_TO_BE_REPLACED'
 const COMMAND_NAME_ENV_VARS = 'COMMAND_NAME_ENV_VARS_TO_BE_REPLACED'
 
 const program = new Command(COMMAND_NAME)
+export default program
+
 program.allowExcessArguments(false)
 
 function httpRequest(url, { method, body, headers }) {
   return new Promise((resolve, reject) => {
-    const client = url.startsWith('https') ? require('https') : require('http')
+    const client = url.startsWith('https') ? https : http
     const request = client.request(url, { headers, method }, (response) => {
       const body = []
       response.on('data', (chunk) => body.push(chunk))
@@ -163,3 +169,14 @@ program.option('-s, --server <server>', 'Base URL to use for requests')
 program.option('-a, --auth <auth>', 'Authorization header to send')
 program.option('-h, --header <header>', 'Set HTTP Header in the format "key: value". ' +
   'Headers set with this option take precedence over any other headers', (p,v) => (v ?? []).concat([p]))
+
+function isMain() {
+  // We use realpathSync to resolve symlinks, as cli scripts will often
+  // be executed from symlinks in the `node_modules/.bin`-folder
+  const realPath = realpathSync(process.argv[1]);
+
+  // Convert the file-path to a file-url before comparing it
+  const realPathAsUrl = pathToFileURL(realPath).href;
+
+  return import.meta.url === realPathAsUrl;
+}
