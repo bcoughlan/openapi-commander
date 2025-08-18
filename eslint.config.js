@@ -1,34 +1,15 @@
-import { defineConfig } from "eslint/config";
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
-export default defineConfig([{
-    'env': {
-        'commonjs': true,
-        'es2021': true,
-        'node': true,
-        'jest/globals': true
-    },
-    'plugins': ['jest'],
-    'extends': ['eslint:recommended'],
-    'root': true,
-    'parserOptions': {
-        'ecmaVersion': 'latest'
-    },
-    overrides: [
-        {
-            files: ['src/*.ts'],
-            plugins: [
-            '@typescript-eslint',
-            ],
-            extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
-            parser: '@typescript-eslint/parser',
-            parserOptions: {
-                project: ['./tsconfig.json'],
-            },
-            'rules': {
-                '@typescript-eslint/no-explicit-any': 'off',
-                '@typescript-eslint/no-namespace': 'off',
-                '@typescript-eslint/no-empty-interface': 'off'
-            },
+export default tseslint.config(
+    eslint.configs.recommended,
+    tseslint.configs.recommended,
+    {
+        rules: {
+            '@typescript-eslint/no-empty-object-type': 'off',
+            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-namespace': 'off',
+            '@typescript-eslint/no-empty-interface': 'off'
         },
-    ],
-}])
+    }
+);
