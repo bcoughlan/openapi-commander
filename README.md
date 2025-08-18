@@ -1,9 +1,41 @@
 # OpenAPI Commander
 
+Generate a Node.js command line tool from an OpenAPI definition using the
+[commander](https://www.npmjs.com/package/commander) library.
+
+```
+$ node petstore.js
+
+Usage: petstore [options] [command]
+
+Options:
+  -p, --print <mode>     Print the HTTP request instead of sending it. (choices: "curl", "plain")
+  -s, --server <server>  Server to use
+  -a, --auth <auth>      Authorization header to send
+  -h, --help             display help for command
+
+Commands:
+  pet                    Everything about your Pets
+  user                   Operations about user
+  help [command]         display help for command
+
+$ node petstore.js pet getPetById 1
+Status: 200
+{
+  "id": 1,
+  "category": {
+    "id": 1,
+    "name": "Hola"
+  },
+}
+```
+
+It can be used as a starter for writing command line tools that talk to APIs,
+or as an alternative to using curl to work with APIs.
+
 <!-- generated with "markdown-toc -i README.md" -->
 <!-- toc -->
 
-- [Overview](#overview)
 - [Features](#features)
 - [Setup](#setup)
 - [Examples](#examples)
@@ -21,31 +53,6 @@
 
 <!-- tocstop -->
 
-# Overview
-
-Generate a Node.js command line tool from an OpenAPI definition using the
-[commander](https://www.npmjs.com/package/commander) library.
-
-```
-~/petstore$ node petstore.js
-
-Usage: petstore [options] [command]
-
-Options:
-  -p, --print <mode>     Print the HTTP request instead of sending it. (choices: "curl", "plain")
-  -s, --server <server>  Server to use
-  -a, --auth <auth>      Authorization header to send
-  -h, --help             display help for command
-
-Commands:
-  pet                    Everything about your Pets
-  store
-  user                   Operations about user
-  help [command]         display help for command
-```
-
-It can be used as a starter for writing command line tools that talk to APIs,
-or as an alternative to using curl to work with APIs.
 
 # Features
 
