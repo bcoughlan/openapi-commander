@@ -18,7 +18,7 @@ export function Generator(specLocation : string, cmdName : string) {
     const spec = await parseSpec(specLocation)
     const program = convertToIntermediate(spec, cmdName)
 
-    write((await fs.readFile(path.join(__dirname, '../resources/header.js'), 'utf8'))
+    write((await fs.readFile(path.join(import.meta.dirname, '../resources/header.js'), 'utf8'))
       .replace('COMMAND_NAME_TO_BE_REPLACED', sanitizeString(cmdName))
       .replace('COMMAND_NAME_ENV_VARS_TO_BE_REPLACED', sanitizeString(snakeCase(cmdName).toUpperCase())))
     write(`const defaultServer = '${program.defaultServer ? sanitizeString(program.defaultServer) : ''}'\n\n`)

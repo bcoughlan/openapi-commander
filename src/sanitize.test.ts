@@ -1,18 +1,20 @@
+import { test, describe } from 'node:test'
+import { strict as assert } from 'node:assert'
 import { sanitizeString, sanitizeComment, sanitizeVariable } from './sanitize.ts'
 
 describe('sanitize', () => {
 
-  it('should sanitize string', () => {
+  test('should sanitize string', () => {
     //Should escape backslash and escape quote 
-    expect(sanitizeString("f\no\\'o")).toBe("f\\no\\\\\\'o")
+    assert.equal(sanitizeString("f\no\\'o"), "f\\no\\\\\\'o")
   })
 
-  it('should sanitize comments', () => {
-    expect(sanitizeComment("blah 1 !@£$%^&*(JaJa 😍")).toBe("blah 1 !@$%^&*(JaJa ")
+  test('should sanitize comments', () => {
+    assert.equal(sanitizeComment("blah 1 !@£$%^&*(JaJa 😍"), "blah 1 !@$%^&*(JaJa ")
   })
 
-  it('should sanitize variable names', () => {
-    expect(sanitizeVariable("1blah blah 1 !@£$%^&*(JaJa 😍")).toBe("var1BlahBlah1JaJa")
+  test('should sanitize variable names', () => {
+    assert.equal(sanitizeVariable("1blah blah 1 !@£$%^&*(JaJa 😍"), "var1blahblah1JaJa")
   })
 
 })

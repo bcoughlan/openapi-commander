@@ -83,7 +83,14 @@ export type PathItemObject = {
   servers?: ServerObject[];
   parameters?: ParameterObject[];
 } & {
-  [method in HttpMethods]?: OperationObject;
+  get?: OperationObject,
+  put?: OperationObject,
+  post?: OperationObject,
+  delete?: OperationObject,
+  options?: OperationObject,
+  head?: OperationObject,
+  patch?: OperationObject,
+  trace?: OperationObject,
 };
 
 export type OperationObject = {

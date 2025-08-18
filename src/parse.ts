@@ -1,8 +1,7 @@
 import SwaggerParser from '@apidevtools/swagger-parser'
 import * as OAS31 from "./oas31-types.ts"
 import path from 'path'
-import pkg from 'openapi-types';
-const { OpenAPI, OpenAPIV2 } = pkg;
+import type { OpenAPI, OpenAPIV2 } from 'openapi-types';
 
 /**
  * @returns a fully dereferenced OpenAPI 3.1 model

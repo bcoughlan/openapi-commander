@@ -1,4 +1,6 @@
-module.exports = {
+import { defineConfig } from "eslint/config";
+
+export default defineConfig([{
     'env': {
         'commonjs': true,
         'es2021': true,
@@ -29,4 +31,4 @@ module.exports = {
             },
         },
     ],
-}
+}])

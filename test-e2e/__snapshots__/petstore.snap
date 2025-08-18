@@ -1,20 +1,17 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Petstore can do a GET 1`] = `
+exports[`Petstore > can do a GET 1`] = `
 {
-  "stderr": "",
   "stdout": "Status: 200
 {
   "id": 1,
   "name": "doggie"
 }
 ",
+  "stderr": ""
 }
 `;
 
-exports[`Petstore can do a PUT 1`] = `
+exports[`Petstore > can do a PUT 1`] = `
 {
-  "stderr": "",
   "stdout": "Status: 200
 {
   "id": 10,
@@ -22,33 +19,31 @@ exports[`Petstore can do a PUT 1`] = `
   "status": "available"
 }
 ",
+  "stderr": ""
 }
 `;
 
-exports[`Petstore debug prints 1`] = `
+exports[`Petstore > debug prints 1`] = `
 {
-  "stderr": "",
   "stdout": "GET http://localhost:3123/pet/10
 Accept: */*
 ",
+  "stderr": ""
 }
 `;
 
-exports[`Petstore lists categories 1`] = `
+exports[`Petstore > lists categories 1`] = `
 {
-  "code": 1,
-  "stderr": "",
   "stdout": "Usage: petstore [options] [command]
 
 Options:
-  -p, --print <mode>     Print the HTTP request instead of sending it.
-                         (choices: "curl", "plain")
+  -p, --print <mode>     Print the HTTP request instead of sending it. (choices:
+                         "curl", "plain")
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
-  -h, --header <header>  Set HTTP Header in the format "key: value". Headers
-                         set with this option take precedence over any other
-                         headers
+  -h, --header <header>  Set HTTP Header in the format "key: value". Headers set
+                         with this option take precedence over any other headers
   --help                 display help for command
 
 Commands:
@@ -57,13 +52,13 @@ Commands:
   user                   Operations about user
   help [command]         display help for command
 ",
+  "stderr": "",
+  "code": 1
 }
 `;
 
-exports[`Petstore lists commands 1`] = `
+exports[`Petstore > lists commands 1`] = `
 {
-  "code": 1,
-  "stderr": "",
   "stdout": "Usage: petstore pet [options] [command]
 
 Everything about your Pets
@@ -83,12 +78,13 @@ Commands:
   uploadFile [options] <pet-id>         uploads an image
   help [command]                        display help for command
 ",
+  "stderr": "",
+  "code": 1
 }
 `;
 
-exports[`Petstore prints --help on a PUT 1`] = `
+exports[`Petstore > prints --help on a PUT 1`] = `
 {
-  "stderr": "",
   "stdout": "Usage: petstore pet updatePet [options] [command] <body>
 
 Update an existing pet by Id
@@ -105,28 +101,28 @@ Options:
 Commands:
   examples
 ",
+  "stderr": ""
 }
 `;
 
-exports[`Petstore prints a curl GET request 1`] = `
+exports[`Petstore > prints a curl GET request 1`] = `
 {
-  "stderr": "",
   "stdout": "curl -X GET -H 'Accept: */*' 'http://localhost:3123/pet/10'
 ",
+  "stderr": ""
 }
 `;
 
-exports[`Petstore prints a curl POST request 1`] = `
+exports[`Petstore > prints a curl POST request 1`] = `
 {
-  "stderr": "",
   "stdout": "curl -X POST -H 'Content-Type: application/json' -H 'Accept: */*' -H 'Authorization: Bearer mytoken' 'http://localhost:3123/pet' -d '{"id":1,"name":"doggie"}'
 ",
+  "stderr": ""
 }
 `;
 
-exports[`Petstore prints examples 1`] = `
+exports[`Petstore > prints examples 1`] = `
 {
-  "stderr": "",
   "stdout": "Example for application/json:
 {
   "id": 10,
@@ -147,5 +143,6 @@ exports[`Petstore prints examples 1`] = `
   "status": "available"
 }
 ",
+  "stderr": ""
 }
 `;

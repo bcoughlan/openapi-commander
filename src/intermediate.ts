@@ -167,11 +167,11 @@ type Endpoint = {
 }
 type GroupedEndpoints = {[tag: string]: Endpoint[]}
 
-function groupEndpointsByFirstTag(api: OAS31Flat.Document) {
+function groupEndpointsByFirstTag(api: OAS31.Document) {
   const grouped: GroupedEndpoints = {}
 
   for (const [path, pathItem] of Object.entries(api.paths)) {
-    for (const method of Object.values(OAS31Flat.HttpMethods)) {
+    for (const method of Object.values(OAS31.HttpMethods)) {
       if (pathItem && method in pathItem) {
         const operation = pathItem?.[method]
         if (operation) {
@@ -190,7 +190,7 @@ function groupEndpointsByFirstTag(api: OAS31Flat.Document) {
  * Tags don't have to be defined in the 'tags' part of the spec, but if they are we want the tags
  * to be defined in the order that the user has defined.
  */
-function getOrderedTags(doc: OAS31Flat.Document, endpointsByTag: GroupedEndpoints): OAS31Flat.TagObject[] {
+function getOrderedTags(doc: OAS31.Document, endpointsByTag: GroupedEndpoints): OAS31.TagObject[] {
   //filter tags that are not referenced by any operations
   const usedTagNames = Object.keys(endpointsByTag).filter(t => t.length > 0)
   const tags = (doc.tags ?? []).filter(e => usedTagNames.includes(e.name))
