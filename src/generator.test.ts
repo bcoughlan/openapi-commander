@@ -1,12 +1,15 @@
-import { Generator } from './generator'
+import { test, describe } from 'node:test'
+import { strict as assert } from 'node:assert'
+import { Generator } from './generator.ts'
 import { join } from 'node:path'
 
 describe('snapshots', () => {
 
-  it('generates successfully', async () => {
-    const inputFile = join(__dirname, '../test-resources/petstore.yaml')
+  test('generates successfully', async () => {
+    
+    const inputFile = join(import.meta.dirname, '../test-resources/petstore.yaml')
     const output = await Generator(inputFile, 'petStore').generate()
-    expect(output).toContain('Everything about your Pets')
+    assert(output.includes('Everything about your Pets'))
   })
 
 })

@@ -1,9 +1,9 @@
 import * as OpenAPISampler from 'openapi-sampler'
 import jsYaml from 'js-yaml'
-import { OAS31Flat } from "./oas31-types"
+import * as OAS31 from "./oas31-types.ts"
 import type { JSONSchema7 } from 'json-schema'
 
-export function getExamples(operation : OAS31Flat.OperationObject) : {[contentType: string]: string[]} {
+export function getExamples(operation : OAS31.OperationObject) : {[contentType: string]: string[]} {
   function renderExample(example : object | string, contentType : string) : string | null {
     if (typeof example === 'string') {
       return example

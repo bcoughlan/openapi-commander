@@ -1,14 +1,13 @@
 import SwaggerParser from '@apidevtools/swagger-parser'
-import { OpenAPI, OpenAPIV2 } from "openapi-types"
-import { OAS31Flat } from "./oas31-types"
+import * as OAS31 from "./oas31-types.ts"
 import path from 'path'
-
+import type { OpenAPI, OpenAPIV2 } from 'openapi-types';
 
 /**
  * @returns a fully dereferenced OpenAPI 3.1 model
  * @param specLocation File path containing a Swagger 2, OpenAPI 3.0 or OpenAPI 3.1 YAML or JSON.
  */
-export async function parseSpec(specLocation: string): Promise<OAS31Flat.Document> {
+export async function parseSpec(specLocation: string): Promise<OAS31.Document> {
   const parsed = await SwaggerParser.parse(specLocation)
 
   //TODO convert OpenAPI 3.0 to OpenAPI 3.1 so we can work with a consistent format
@@ -21,9 +20,9 @@ export async function parseSpec(specLocation: string): Promise<OAS31Flat.Documen
 
 }
 
-async function dereference(specLocation: string, spec: OpenAPI.Document) : Promise<OAS31Flat.Document> {
+async function dereference(specLocation: string, spec: OpenAPI.Document) : Promise<OAS31.Document> {
   if (specLocation.startsWith('http://') || specLocation.startsWith('https://')) {
-    return SwaggerParser.dereference(spec) as Promise<OAS31Flat.Document>
+    return SwaggerParser.dereference(spec) as Promise<OAS31.Document>
   }
 
   //Seems like SwaggerParser does not work with paths
@@ -33,7 +32,7 @@ async function dereference(specLocation: string, spec: OpenAPI.Document) : Promi
   const oldCwd = process.cwd()
   try {
     process.chdir(absoluteDir)
-    return SwaggerParser.dereference(spec) as Promise<OAS31Flat.Document>
+    return SwaggerParser.dereference(spec) as Promise<OAS31.Document>
   } finally {
     process.chdir(oldCwd)
   }

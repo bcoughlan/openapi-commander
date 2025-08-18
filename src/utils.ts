@@ -1,4 +1,4 @@
-import { camelCase } from "lodash"
+import { camelCase } from "lodash-es"
 
 export function trimDescription(str : string | undefined) : string | undefined {
   if (!str) return undefined
@@ -15,7 +15,7 @@ export function shellEscape(str : string) : string {
 
 //Generate non-clashing names. Adds a number (1, 2, 3, ...) to the end if already used.
 export function UniqueNameGenerator(initial? : string[]) {
-  const used = new Set(initial) ?? new Set()
+  const used = new Set(initial ?? [])
 
   return {
     get: (name : string) => {

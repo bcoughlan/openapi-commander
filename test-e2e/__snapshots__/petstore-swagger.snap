@@ -1,42 +1,37 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Petstore Swagger 2 debug prints 1`] = `
+exports[`Petstore Swagger 2 > debug prints 1`] = `
 {
-  "stderr": "",
   "stdout": "GET http://petstore.swagger.io/v1/pets
 Accept: */*
 ",
+  "stderr": ""
 }
 `;
 
-exports[`Petstore Swagger 2 lists categories 1`] = `
+exports[`Petstore Swagger 2 > lists categories 1`] = `
 {
-  "code": 1,
-  "stderr": "",
   "stdout": "Usage: petstore-swagger [options] [command]
 
 Options:
-  -p, --print <mode>     Print the HTTP request instead of sending it.
-                         (choices: "curl", "plain")
+  -p, --print <mode>     Print the HTTP request instead of sending it. (choices:
+                         "curl", "plain")
   -v, --verbose          Includes the response headers in the output
   -s, --server <server>  Base URL to use for requests
   -a, --auth <auth>      Authorization header to send
-  -h, --header <header>  Set HTTP Header in the format "key: value". Headers
-                         set with this option take precedence over any other
-                         headers
+  -h, --header <header>  Set HTTP Header in the format "key: value". Headers set
+                         with this option take precedence over any other headers
   --help                 display help for command
 
 Commands:
   pets
   help [command]         display help for command
 ",
+  "stderr": "",
+  "code": 1
 }
 `;
 
-exports[`Petstore Swagger 2 lists commands 1`] = `
+exports[`Petstore Swagger 2 > lists commands 1`] = `
 {
-  "code": 1,
-  "stderr": "",
   "stdout": "Usage: petstore-swagger pets [options] [command]
 
 Options:
@@ -48,5 +43,7 @@ Commands:
   showPetById <pet-id>  Info for a specific pet
   help [command]        display help for command
 ",
+  "stderr": "",
+  "code": 1
 }
 `;
