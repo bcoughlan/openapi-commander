@@ -105,9 +105,11 @@ function getArguments(endpoint: Endpoint) : CLI.Argument[] {
 
     const isOption = p.schema?.type === 'array' || !p.required || p.schema?.default !== undefined
     if (isOption) {
-      args.push({ ...argBase, 
+      const flag = unique.isUsed(argBase.name[0]) ? undefined : argBase.name[0]
+      if (flag) unique.get(flag) // register the short flag so it's not reused
+      args.push({ ...argBase,
         type: 'option',
-        flag: unique.isUsed(argBase.name[0]) ? undefined : argBase.name[0],
+        flag,
         default: p.schema?.default
       })
     } else {
